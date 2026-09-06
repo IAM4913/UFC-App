@@ -12,6 +12,17 @@ State is saved in the browser, so a refresh does not lose the draft.
 3. When you are on the clock the top bar pulses and the **Advice** panel lists the best picks with reasons.
 4. Fell behind? **Sync / Import** → paste the Yahoo *Draft Results* text; every missing pick is applied in order.
 
+## Ask Claude during the draft
+
+The right-hand **Ask Claude** column (fourth column on wide screens) is a chatbot that sees the live board, your roster,
+the engine's recommendations and the position outlook, and answers pick questions in a few sentences.
+
+* **Hosted page (artifact):** works out of the box; the viewer is asked for consent on the first question.
+* **Local:** copy `.env.example` to `.env`, put your `ANTHROPIC_API_KEY` in it, run `npm install` once, then
+  `node server.js` and open http://localhost:3000. The server streams answers from `claude-opus-5`
+  (override with `CHAT_MODEL`; `CHAT_EFFORT=low|medium|high` trades depth for speed on the clock).
+  Server-side refusal fallbacks are enabled and silently dropped if the API rejects the beta.
+
 ## Live auto-sync from the Yahoo draft room (optional)
 
 ```
@@ -43,7 +54,7 @@ into `SELECTORS` at the top of the userscript, and save. Manual entry and paste-
 
 | Path | Purpose |
 | --- | --- |
-| `app/index.html`, `app/app.js` | UI |
+| `app/index.html`, `app/app.js`, `app/chat.js` | UI and the draft chatbot |
 | `app/engine.js` | scoring, VBD, availability model, recommendations, parsers (unit-tested) |
 | `app/players.js` | generated player pool + strategy notes |
 | `data/players.json`, `data/raw/` | dataset and the per-position research it was built from |

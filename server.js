@@ -5,7 +5,25 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
+// Load .env (KEY=VALUE lines) without a dependency; real environment variables win.
+try {
+  fs.readFileSync(path.join(__dirname, '.env'), 'utf8').split(/\r?\n/).forEach(line => {
+    const m = line.match(/^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
+    if (!m || line.trim().startsWith('#')) return;
+    let v = m[2]; if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
+    if (process.env[m[1]] === undefined) process.env[m[1]] = v;
+  });
+} catch (e) { /* no .env */ }
+
 const PORT = parseInt(process.argv[2] || process.env.PORT || '3000', 10);
+const CHAT_MODEL = process.env.CHAT_MODEL || 'claude-opus-5';
+const CHAT_EFFORT = process.env.CHAT_EFFORT || 'medium';
+let Anthropic = null;
+try { Anthropic = require('@anthropic-ai/sdk'); } catch (e) { Anthropic = null; }
+const chatReady = () => !!(Anthropic && (process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN));
+const chatReason = () => !Anthropic ? 'run npm install (missing @anthropic-ai/sdk)' : 'ANTHROPIC_API_KEY missing: add it to .env next to server.js and restart';
+let anthropicClient = null;
+function getClient() { if (!anthropicClient) anthropicClient = new Anthropic(); return anthropicClient; }
 const APP_DIR = path.join(__dirname, 'app');
 const LOG = path.join(__dirname, 'draft-log.json');
 
@@ -44,6 +62,43 @@ const server = http.createServer(async (req, res) => {
     return;
   }
   if (url.pathname === '/api/state') return json(res, 200, { names, details, info, count: names.length });
+  if (url.pathname === '/api/chat/status') return json(res, 200, { ready: chatReady(), model: CHAT_MODEL, effort: CHAT_EFFORT, reason: chatReady() ? '' : chatReason() });
+  if (url.pathname === '/api/chat' && req.method === 'POST') {
+    if (!chatReady()) return json(res, 503, { error: chatReason() });
+    const b = await body(req);
+    const messages = (Array.isArray(b.messages) ? b.messages : []).filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim())
+      .map(m => ({ role: m.role, content: m.content }));
+    if (!messages.length || messages[messages.length - 1].role !== 'user') return json(res, 400, { error: 'messages must end with a user turn' });
+    const system = [
+      { type: 'text', text: String(b.staticContext || 'You are a fantasy football draft advisor.'), cache_control: { type: 'ephemeral' } },
+      { type: 'text', text: '=== DRAFT CONTEXT (live) ===\n' + String(b.context || '') + '\n=== END CONTEXT ===' },
+    ];
+    cors(res);
+    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' });
+    const send = (ev, data) => { try { res.write(`event: ${ev}\ndata: ${JSON.stringify(data)}\n\n`); } catch (e) { /* client gone */ } };
+    const client = getClient();
+    const base = { model: CHAT_MODEL, max_tokens: 2000, system, messages, output_config: { effort: CHAT_EFFORT } };
+    async function run(withFallbacks) {
+      // Server-side refusal fallbacks (recommended for claude-opus-5); retried without if the API rejects the beta.
+      const stream = withFallbacks
+        ? client.beta.messages.stream(Object.assign({ betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }, base))
+        : client.messages.stream(base);
+      stream.on('text', (delta) => send('delta', { text: delta }));
+      const final = await stream.finalMessage();
+      send('done', { stop_reason: final.stop_reason, usage: final.usage, model: final.model });
+    }
+    try {
+      try { await run(true); }
+      catch (e) {
+        if (e && e.status === 400 && /fallback|beta|betas/i.test(String(e.message))) await run(false); else throw e;
+      }
+    } catch (e) {
+      const msg = e && e.status ? `API error ${e.status}: ${e.message}` : String(e && e.message || e);
+      console.error('chat error:', msg);
+      send('error', { message: msg });
+    }
+    return res.end();
+  }
   if (url.pathname === '/api/players') {
     // Player names for the userscript matcher.
     try {
@@ -86,4 +141,5 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
   console.log(`Draft Command running at http://localhost:${PORT}`);
   console.log(`Picks so far: ${names.length}. POST /api/pick {name}, POST /api/sync {names:[...]}, DELETE /api/picks to reset.`);
+  console.log(chatReady() ? `Chat ready: ${CHAT_MODEL} (effort ${CHAT_EFFORT})` : `Chat NOT ready: ${chatReason()}`);
 });

@@ -60,6 +60,11 @@ const { spawn } = require('child_process');
     const st = await page.evaluate(() => ({ teams: window.DraftApp.state.settings.teams, bn: window.DraftApp.state.settings.roster.BN, rec: window.DraftApp.state.settings.scoring.rec, pass: window.DraftApp.state.settings.scoring.pass_yds }));
     console.log('settings applied:', JSON.stringify(st));
 
+    // chat panel present; server reports not-ready without a key
+    await page.waitForFunction(() => /Local server found|Connected|Chat needs/.test(document.getElementById('chatStatus').textContent), null, { timeout: 8000 });
+    console.log('chat status:', await page.textContent('#chatStatus'));
+    const ctx = await page.evaluate(() => window.DraftChat.buildContext());
+    console.log('chat context chars:', ctx.length, '| has recs:', /ENGINE TOP RECOMMENDATIONS/.test(ctx));
     const status = await page.textContent('#status');
     console.log('status:', status.replace(/\s+/g, ' ').trim());
     const advice = await page.textContent('#advice');

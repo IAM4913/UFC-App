@@ -27,26 +27,32 @@
 
   const PRESETS = {
     yahoo_half: {
-      label: 'Yahoo default (Half PPR, 10 teams, 2 WR)',
-      teams: 10,
+      label: 'Yahoo default (Half PPR, 8 teams, 2 WR)',
+      teams: 8,
       roster: { QB: 1, RB: 2, WR: 2, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
       scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 0.5, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
     },
     yahoo_ppr: {
-      label: 'Full PPR (10 teams, 2 WR)',
-      teams: 10,
+      label: 'Full PPR (8 teams, 2 WR)',
+      teams: 8,
       roster: { QB: 1, RB: 2, WR: 2, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
       scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 1, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
     },
     yahoo_std: {
-      label: 'Standard (no PPR, 10 teams, 2 WR)',
-      teams: 10,
+      label: 'Standard (no PPR, 8 teams, 2 WR)',
+      teams: 8,
       roster: { QB: 1, RB: 2, WR: 2, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
       scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 0, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
     },
-    half_3wr: {
-      label: 'Half PPR, 10 teams, 3 WR',
+    half_10: {
+      label: 'Half PPR, 10 teams, 2 WR',
       teams: 10,
+      roster: { QB: 1, RB: 2, WR: 2, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
+      scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 0.5, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
+    },
+    half_3wr: {
+      label: 'Half PPR, 8 teams, 3 WR',
+      teams: 8,
       roster: { QB: 1, RB: 2, WR: 3, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
       scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 0.5, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
     },

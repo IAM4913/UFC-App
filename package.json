@@ -22,5 +22,8 @@
   "homepage": "https://github.com/IAM4913/UFC-App#readme",
   "devDependencies": {
     "playwright-core": "^1.56.1"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.124.0"
   }
 }

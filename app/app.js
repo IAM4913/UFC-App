@@ -18,6 +18,8 @@
     const settings = Object.assign(E.defaultSettings(), (s && s.settings) || {});
     settings.roster = Object.assign(E.defaultSettings().roster, settings.roster || {});
     settings.scoring = Object.assign(E.defaultSettings().scoring, settings.scoring || {});
+    // v2: league confirmed as 8 teams; migrate settings saved by the first release (which defaulted to 10).
+    if (settings.v !== 2) { settings.teams = 8; settings.myPick = 7; settings.v = 2; }
     return { settings, picks: (s && s.picks) || [], customPlayers: (s && s.customPlayers) || null, syncUrl: (s && s.syncUrl) || '' };
   }
   function saveState() {
@@ -273,7 +275,7 @@
 
   function renderPlan() {
     const notes = window.STRATEGY_NOTES || {};
-    const key = state.settings.teams >= 12 ? 'teams12' : 'teams10';
+    const key = state.settings.teams <= 8 ? 'teams8' : state.settings.teams >= 12 ? 'teams12' : 'teams10';
     const txt = notes[key] || notes.general || 'No strategy notes loaded.';
     const mine = calc.myPickNos;
     $('planNotes').textContent = `Your picks: ${mine.join(', ')}\n\n` + txt;

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const app = path.join(__dirname, 'app');
 let html = fs.readFileSync(path.join(app, 'index.html'), 'utf8');
-for (const f of ['players.js', 'engine.js', 'app.js']) {
+for (const f of ['players.js', 'engine.js', 'app.js', 'chat.js']) {
   const src = fs.readFileSync(path.join(app, f), 'utf8').replace(/<\/script>/g, '<\\/script>');
   html = html.replace(`<script src="${f}"></script>`, `<script>\n${src}\n</script>`);
 }

@@ -13,7 +13,7 @@ walk in with and the fallback if the screen goes dark.
   comparable. Kicker and defense projections are discounted in the value math on purpose.
 * Bye weeks were not verifiable for every player and may show blank; check the Yahoo player card if a bye matters to you.
 * Yahoo default roster is **QB, WR, WR, RB, RB, TE, W/R/T, K, DEF, 6 BN** (15 rounds), half-PPR, 4-pt pass TD, 60-second
-  clock. If your league uses 3 WR or 12 teams, switch the preset in Settings; the plans below cover both sizes.
+  clock. The app defaults to **8 teams, pick 7**; switch the preset in Settings if your roster differs. Plans below cover 8, 10 and 12 teams.
 
 ## The pick-7 decision tree (both league sizes)
 
@@ -65,6 +65,27 @@ Do not take Lamb, Barkley or Jeanty at 7; equal value comes back at 14 (10-team)
   Jaylen Warren RB1 in PIT with Rico Dowdle behind; Chuba Hubbard (hamstring) shares with Jonathon Brooks in CAR.
 * **Rookies with real roles:** Jadarian Price (SEA RB, lead with Charbonnet out), Emmett Johnson (KC RB2),
   Jonah Coleman (DEN goal-line), Carnell Tate (TEN WR starter), KC Concepcion (CLE WR starter), Makai Lemon (PHI slot).
+
+## Round-by-round: 8-team league (your league)
+
+Picks: **7, 10, 23, 26, 39, 42, 55, 58, 71, 74, 87, 90, 103, 106, 119.** Eight teams changes the math more than
+any other setting: replacement level is RB16/WR16/QB8/TE8, so bench depth is nearly worthless, the waiver wire is deep,
+and elite positional edges (a top QB or TE) are worth more than in a 10- or 12-team room. You pick twice at the 7/10
+turn, then wait 13 picks.
+
+- **R1 #7 and R2 #10 (the turn):** take the two best players across RB/WR. Typical pair: one of Nacua / JSN / CMC / Achane
+  at 7 plus one of Jefferson / St. Brown / Lamb / Saquon / Jeanty at 10. RB+WR is the default; two tier-1 RBs is fine.
+- **R3 #23 and R4 #26:** this turn still lands ADP 18-30 players. An elite TE (McBride / Bowers) or elite QB (Allen /
+  Lamar / Daniels / Maye) is often the best value here because the 8-team edge at QB/TE is large; pair with a tier-3 RB
+  (Hampton / Irving / Kyren / Henderson / Chase Brown) or WR (Collins / London / BTJ / A.J. Brown / Pickens).
+- **R5 #39 and R6 #42:** fill the last starter slots (RB2 / WR2 / FLEX): Egbuka, McConkey, McMillan, Rice, Higgins,
+  Garrett Wilson; RBs Judkins / Hall / Walker / Javonte / Etienne.
+- **R7 #55 and R8 #58:** QB if you have none (Burrow / Daniels tier or the round-8 group), TE if none (Warren / Fannin /
+  Ferguson / Loveland), otherwise the best upside RB/WR.
+- **R9 to R13 (#71 to #106):** upside and handcuffs only, your RB1's handcuff first. Chase ceiling, not floor.
+- **R14 #106 / R15 #119:** DEF then K. Never earlier.
+- **Runs:** with 8 teams a run rarely empties a tier before your next pick, so do not chase one. Do take the last elite
+  QB or TE if the other one goes.
 
 ## Round-by-round: 10-team (default 2 WR or 3 WR) — Round-by-round: 10-team Yahoo default (QB, WR3, RB2, TE, W/R/T, K, DEF, 6 BN; 15 rds)
 
