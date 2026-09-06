@@ -110,6 +110,10 @@ details summary{cursor:pointer;color:var(--muted);font-size:12px}
 .kbd{font-family:ui-monospace,Menlo,monospace;background:#0b0f14;border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:11px}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#555;margin-right:5px}
 .dot.on{background:var(--ok)}
+.dot.warn{background:var(--accent2)}
+.yahoo-box{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:12px;background:var(--panel2)}
+.yahoo-box .row{margin:6px 0}
+.yahoo-box a{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -213,15 +217,39 @@ details summary{cursor:pointer;color:var(--muted);font-size:12px}
 <div class="modal-bg" id="syncModal">
   <div class="modal">
     <h3>Sync picks from Yahoo</h3>
+    <div class="yahoo-box" id="yahooBox">
+      <h4 style="margin:4px 0">Yahoo account (official API) <span class="muted" style="font-weight:normal">— connect once, then league settings and every pick arrive automatically</span></h4>
+      <div id="yahooNoServer" class="muted" hidden>Requires the local server: run <span class="kbd">node server.js</span> and open <span class="kbd">http://localhost:3000</span> (the API needs a server-side secret, so the standalone file cannot do this).</div>
+      <div id="yahooCreds" hidden>
+        <p class="muted" style="margin:4px 0">One-time setup: create an app at <a href="https://developer.yahoo.com/apps/create/" target="_blank" rel="noopener">developer.yahoo.com/apps/create</a> (API permissions: <b>Fantasy Sports → Read</b>). Paste its Client ID and Client Secret here; they are stored only in <span class="kbd">yahoo-config.json</span> next to the server. If the form insists on a redirect URI, enter <span class="kbd">https://localhost:3000/api/yahoo/callback</span> there and here.</p>
+        <div class="row"><label>Client ID <input type="text" id="yahooClientId" style="width:260px" autocomplete="off"></label><label>Client Secret <input type="text" id="yahooClientSecret" style="width:200px" autocomplete="off"></label><label>Redirect URI <input type="text" id="yahooRedirect" style="width:160px" placeholder="oob"></label><button class="primary" id="btnYahooSaveCreds">Save</button></div>
+      </div>
+      <div class="row" id="yahooAuthRow" hidden>
+        <button class="primary" id="btnYahooConnect">Connect Yahoo</button>
+        <span class="muted">then paste the code Yahoo shows (or the full URL it lands on):</span>
+        <input type="text" id="yahooCode" style="width:220px" placeholder="code or URL">
+        <button id="btnYahooCode">Submit code</button>
+      </div>
+      <div class="row" id="yahooLeagueRow" hidden>
+        <label>League <select id="yahooLeague" style="min-width:220px"></select></label>
+        <button id="btnYahooRefreshLeagues" title="Reload the league list">↻</button>
+        <button class="primary" id="btnYahooUse">Use this league</button>
+        <button id="btnYahooPoll" title="Fetch draft picks now">Fetch picks</button>
+        <button id="btnYahooStop" title="Stop syncing this league">Stop</button>
+        <button id="btnYahooLogout" class="danger" title="Forget the Yahoo login on the server">Disconnect</button>
+        <button id="btnYahooEditCreds" class="small" title="Change client id / secret">creds</button>
+      </div>
+      <div id="yahooStatus" class="muted"><span class="dot"></span>checking…</div>
+    </div>
     <div class="grid2">
       <div>
-        <h4 style="margin:4px 0">A. Paste draft results</h4>
+        <h4 style="margin:4px 0">A. Paste draft results (fallback)</h4>
         <p class="muted" style="margin:4px 0">In the Yahoo draft room open the <b>Draft Results</b> (or Picks) tab, select all the text, copy, and paste here. Every player name found is marked drafted in pick order. Safe to repeat: already-drafted players are skipped.</p>
         <textarea id="pastePicks" placeholder="1.01 Team A  Jahmyr Gibbs (Det - RB)&#10;1.02 Team B  Bijan Robinson (Atl - RB) ..."></textarea>
         <div class="row"><button class="primary" id="btnParsePicks">Apply pasted picks</button><span id="pasteResult" class="muted"></span></div>
       </div>
       <div>
-        <h4 style="margin:4px 0">B. Live auto-sync (local server + userscript)</h4>
+        <h4 style="margin:4px 0">B. Live auto-sync via userscript (fallback)</h4>
         <p class="muted" style="margin:4px 0">Run <span class="kbd">node server.js</span> from the repo, open <span class="kbd">http://localhost:3000</span>, and install <span class="kbd">yahoo-draft-sync.user.js</span> in Tampermonkey. The userscript watches the Yahoo draft room and pushes picks here.</p>
         <div class="row"><label>Server URL <input type="text" id="syncUrl" placeholder="http://localhost:3000" style="width:220px"></label><button id="btnConnect">Connect</button></div>
         <div id="syncStatus" class="muted"><span class="dot"></span>not connected</div>

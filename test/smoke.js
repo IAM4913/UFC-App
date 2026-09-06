@@ -60,6 +60,38 @@ const { spawn } = require('child_process');
     const st = await page.evaluate(() => ({ teams: window.DraftApp.state.settings.teams, bn: window.DraftApp.state.settings.roster.BN, rec: window.DraftApp.state.settings.scoring.rec, pass: window.DraftApp.state.settings.scoring.pass_yds }));
     console.log('settings applied:', JSON.stringify(st));
 
+    // Yahoo API surface: not configured on a fresh checkout, endpoints answer sanely, modal renders the setup step
+    const ys = await page.request.get(`http://localhost:${port}/api/yahoo/status`).then(r => r.json());
+    if (ys.configured !== false || ys.authorized !== false || ys.league !== null) errors.push('yahoo status unexpected: ' + JSON.stringify(ys));
+    const au = await page.request.get(`http://localhost:${port}/api/yahoo/auth-url`);
+    if (au.status() !== 500) errors.push('auth-url should fail when unconfigured');
+    const lp = await page.request.post(`http://localhost:${port}/api/yahoo/poll`);
+    if (lp.status() !== 400) errors.push('poll without a league should be 400');
+    await page.click('#btnSync');
+    await page.waitForFunction(() => /client id/.test(document.getElementById('yahooStatus').textContent));
+    const credsHidden = await page.$eval('#yahooCreds', el => el.hidden);
+    const leagueHidden = await page.$eval('#yahooLeagueRow', el => el.hidden);
+    if (credsHidden || !leagueHidden) errors.push('yahoo modal should show credentials step only');
+    await page.click('#btnSyncClose');
+    console.log('yahoo endpoints ok');
+
+    // Yahoo picks: authoritative, pick-numbered, unknown players get placeholders, team overrides honoured
+    const yr = await page.evaluate(() => {
+      window.DraftApp.applyLeagueSettings({ teams: 12, myPick: 5, teamNames: ['A', 'B', 'C', 'D', 'Me', 'F', 'G', 'H', 'I', 'J', 'K', 'L'], roster: { QB: 1, RB: 2, WR: 2, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 5 }, scoring: { rec: 1 } });
+      const r = window.DraftApp.applyYahooPicks([
+        { pick: 1, round: 1, name: 'Bijan Robinson', pos: 'RB', team: 'ATL', teamIdx: 0 },
+        { pick: 2, round: 1, name: 'Someone Unknown', pos: 'WR', team: 'ZZZ', teamIdx: 1 },
+        { pick: 3, round: 1, name: 'Baltimore', pos: 'DEF', team: 'BAL', teamIdx: 7 },
+      ]);
+      const st = window.DraftApp.state;
+      return { r, teams: st.settings.teams, myPick: st.settings.myPick, rec: st.settings.scoring.rec, wr: st.settings.roster.WR, picks: st.picks.map(p => [p.playerId, p.teamOverride, p.source]), extra: st.extraPlayers.length };
+    });
+    console.log('yahoo picks:', JSON.stringify(yr));
+    if (!yr.r.replaced || yr.teams !== 12 || yr.myPick !== 5 || yr.rec !== 1 || yr.wr !== 2) errors.push('league settings/picks not applied: ' + JSON.stringify(yr));
+    if (yr.picks.length !== 3 || yr.picks[1][0] !== 'yahoo-someone-unknown-wr' || yr.picks[2][0] !== 'ravens-d-st-def' || yr.picks[2][1] !== 7 || yr.picks[0][1] !== undefined) errors.push('yahoo pick mapping wrong: ' + JSON.stringify(yr.picks));
+    const teamsShown = await page.textContent('#board');
+    if (!/Me/.test(teamsShown)) errors.push('team names from league not rendered');
+
     const status = await page.textContent('#status');
     console.log('status:', status.replace(/\s+/g, ' ').trim());
     const advice = await page.textContent('#advice');

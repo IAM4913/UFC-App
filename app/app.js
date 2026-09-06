@@ -18,13 +18,13 @@
     const settings = Object.assign(E.defaultSettings(), (s && s.settings) || {});
     settings.roster = Object.assign(E.defaultSettings().roster, settings.roster || {});
     settings.scoring = Object.assign(E.defaultSettings().scoring, settings.scoring || {});
-    return { settings, picks: (s && s.picks) || [], customPlayers: (s && s.customPlayers) || null, syncUrl: (s && s.syncUrl) || '' };
+    return { settings, picks: (s && s.picks) || [], customPlayers: (s && s.customPlayers) || null, extraPlayers: (s && s.extraPlayers) || [], syncUrl: (s && s.syncUrl) || '', yahooLeague: (s && s.yahooLeague) || null };
   }
   function saveState() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
   }
   function buildPool() {
-    const raw = state.customPlayers || (window.PLAYER_DATA && window.PLAYER_DATA.players) || [];
+    const raw = (state.customPlayers || (window.PLAYER_DATA && window.PLAYER_DATA.players) || []).concat(state.extraPlayers || []);
     const pool = E.prepare(raw);
     E.autoTiers(pool, state.settings.scoring);
     return pool;
@@ -87,6 +87,63 @@
     }
     if (added) { saveState(); renderAll(); }
     return { added, unknown };
+  }
+  // Find the pool player for a Yahoo pick ({name, pos, team}); DEF matches by team abbreviation.
+  function matchPlayer(pk) {
+    const key = E.normalizeName(pk.name);
+    if (pk.pos === 'DEF' && pk.team) { const d = players.find(p => p.pos === 'DEF' && String(p.team || '').toUpperCase() === String(pk.team).toUpperCase()); if (d) return d; }
+    let p = players.find(x => E.normalizeName(x.name) === key && (!pk.pos || !x.pos || x.pos === pk.pos)) || players.find(x => E.normalizeName(x.name) === key);
+    if (p) return p;
+    const s = E.searchPlayers(players, key, 3).filter(x => !pk.pos || x.pos === pk.pos);
+    const last = key.split(' ').pop();
+    p = s.find(x => E.normalizeName(x.name).split(' ').pop() === last && (!pk.team || !x.team || String(x.team).toUpperCase() === String(pk.team).toUpperCase()));
+    return p || null;
+  }
+  // Add a placeholder for a drafted player that is not in the projection pool, so pick numbering stays right.
+  function ensurePlayer(pk) {
+    let p = matchPlayer(pk);
+    if (p) return p;
+    const raw = { name: pk.name, pos: E.POS.includes(pk.pos) ? pk.pos : 'WR', team: pk.team || '', adp: 500, tier: 0, bye: 0, proj_pts_halfppr: 0, status: 'healthy', notes: 'Not in projections (from Yahoo)' };
+    raw.id = 'yahoo-' + E.playerId(raw);
+    state.extraPlayers = state.extraPlayers || [];
+    state.extraPlayers.push(raw);
+    players = buildPool();
+    players.forEach(x => { if (x._srcTier === undefined) x._srcTier = x.tier; });
+    return byId()[raw.id];
+  }
+  // Picks from the Yahoo API are authoritative: [{pick, name, pos, team, teamIdx}] in pick order.
+  function applyYahooPicks(picks) {
+    if (!Array.isArray(picks)) return { added: 0, replaced: false };
+    const sorted = picks.slice().sort((a, b) => a.pick - b.pick);
+    const next = [];
+    sorted.forEach(pk => {
+      const p = ensurePlayer(pk);
+      if (!p || next.some(x => x.playerId === p.id)) return;
+      const slot = E.slotFor(next.length + 1, state.settings.teams);
+      const override = pk.teamIdx != null && pk.teamIdx !== slot.teamIdx && pk.teamIdx < state.settings.teams ? pk.teamIdx : undefined;
+      const existing = state.picks[next.length];
+      next.push(existing && existing.playerId === p.id && (existing.teamOverride === override) ? existing : { playerId: p.id, teamOverride: override, source: 'yahoo', ts: Date.now() });
+    });
+    const replaced = state.picks.slice(0, next.length).some((pk, i) => pk.playerId !== next[i].playerId);
+    const added = Math.max(0, next.length - state.picks.length);
+    if (replaced) state.picks = next; // resync: Yahoo disagrees with local picks
+    else if (added) state.picks = next.concat(state.picks.slice(next.length).filter(pk => pk.source !== 'yahoo' && !next.some(x => x.playerId === pk.playerId)));
+    if (replaced || added) { saveState(); renderAll(); }
+    return { added, replaced };
+  }
+  // Settings from the Yahoo league (teams, roster, scoring, teamNames, myPick).
+  function applyLeagueSettings(ls) {
+    if (!ls) return;
+    const s = state.settings;
+    if (ls.teams) s.teams = ls.teams;
+    if (ls.roster) Object.assign(s.roster, ls.roster);
+    if (ls.scoring) Object.assign(s.scoring, ls.scoring);
+    if (ls.teamNames && ls.teamNames.length) s.teamNames = ls.teamNames.slice();
+    if (ls.myPick) s.myPick = Math.min(s.teams, Math.max(1, ls.myPick));
+    players.forEach(p => { p.tier = p._srcTier != null ? p._srcTier : p.tier; });
+    players = buildPool();
+    players.forEach(x => { if (x._srcTier === undefined) x._srcTier = x.tier; });
+    saveState(); renderAll();
   }
 
   // ---------- rendering ----------
@@ -336,22 +393,107 @@
     url = (url || '').replace(/\/$/, '');
     state.syncUrl = url; saveState();
     if (!url) { setSyncStatus(false, 'not connected'); return; }
-    fetch(url + '/api/state').then(r => r.json()).then(st => {
-      if (st && st.names) { const r = applyNames(st.names, 'sync'); if (r.added) toast(`Synced ${r.added} picks from server`); }
-    }).catch(() => {});
+    fetch(url + '/api/state').then(r => r.json()).then(st => { if (st) handlePicksEvent(st, 'Synced'); }).catch(() => {});
     es = new EventSource(url + '/api/events');
-    es.onopen = () => setSyncStatus(true, 'connected to ' + url);
-    es.onerror = () => setSyncStatus(false, 'connection lost, retrying…');
-    es.addEventListener('picks', ev => {
+    es.onopen = () => { setSyncStatus(true, 'connected to ' + url); refreshYahoo(); };
+    es.onerror = () => { setSyncStatus(false, 'connection lost, retrying…'); renderYahoo(null); };
+    es.addEventListener('picks', ev => { try { handlePicksEvent(JSON.parse(ev.data), 'Auto-synced'); } catch (e) { console.error(e); } });
+    es.addEventListener('yahoo', ev => {
       try {
-        const data = JSON.parse(ev.data);
-        const r = applyNames(data.names || [], 'sync');
-        if (r.added) toast(`Auto-synced ${r.added} pick${r.added > 1 ? 's' : ''}`);
-        if (r.unknown.length) console.warn('Unknown names from sync:', r.unknown);
+        const st = JSON.parse(ev.data);
+        if (st.settingsUpdate && st.league && state.yahooLeague === st.league.key) { applyLeagueSettings(st.settingsUpdate); toast('League settings updated from Yahoo'); }
+        renderYahoo(st);
       } catch (e) { console.error(e); }
     });
   }
+  function handlePicksEvent(data, verb) {
+    if (data.source === 'yahoo' && Array.isArray(data.picks)) {
+      const r = applyYahooPicks(data.picks);
+      if (r.replaced) toast('Resynced picks from Yahoo');
+      else if (r.added) toast(`${verb} ${r.added} pick${r.added > 1 ? 's' : ''} from Yahoo`);
+      return;
+    }
+    const r = applyNames(data.names || [], 'sync');
+    if (r.added) toast(`${verb} ${r.added} pick${r.added > 1 ? 's' : ''}`);
+    if (r.unknown.length) console.warn('Unknown names from sync:', r.unknown);
+  }
   function setSyncStatus(on, msg) { $('syncStatus').innerHTML = `<span class="dot ${on ? 'on' : ''}"></span>${esc(msg)}`; }
+
+  // ---------- Yahoo API (via the local server) ----------
+  let yahooState = null;
+  function yahooApi(path, method, payload) {
+    if (!state.syncUrl) return Promise.reject(new Error('Connect to the local server first'));
+    return fetch(state.syncUrl + '/api/yahoo/' + path, { method: method || 'GET', headers: { 'Content-Type': 'application/json' }, body: payload ? JSON.stringify(payload) : undefined })
+      .then(async r => { const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status)); return j; });
+  }
+  function refreshYahoo() {
+    if (!state.syncUrl) { renderYahoo(null); return Promise.resolve(null); }
+    return yahooApi('status').then(st => { renderYahoo(st); if (st.authorized && !$('yahooLeague').options.length) loadYahooLeagues(); return st; }).catch(() => { renderYahoo(null); return null; });
+  }
+  function loadYahooLeagues() {
+    const sel = $('yahooLeague');
+    sel.innerHTML = '<option value="">loading…</option>';
+    return yahooApi('leagues').then(r => {
+      const list = r.leagues || [];
+      sel.innerHTML = list.length ? list.map(l => `<option value="${esc(l.key)}">${esc(l.name)} (${esc(l.season)}, ${l.numTeams || '?'} teams, ${esc(l.draftStatus || '')})</option>`).join('') : '<option value="">no NFL leagues found</option>';
+      const cur = (yahooState && yahooState.league && yahooState.league.key) || state.yahooLeague;
+      if (cur && list.some(l => l.key === cur)) sel.value = cur;
+    }).catch(e => { sel.innerHTML = '<option value="">could not load leagues</option>'; yahooMsg('warn', e.message); });
+  }
+  function yahooMsg(kind, msg) { $('yahooStatus').innerHTML = `<span class="dot ${kind === 'ok' ? 'on' : kind === 'warn' ? 'warn' : ''}"></span>${esc(msg)}`; }
+  function renderYahoo(st) {
+    yahooState = st;
+    const server = !!(st && state.syncUrl && es && es.readyState !== 2);
+    $('yahooNoServer').hidden = server;
+    $('yahooCreds').hidden = !server || !!st.configured;
+    $('yahooAuthRow').hidden = !server || !st.configured || !!st.authorized;
+    $('yahooLeagueRow').hidden = !server || !st.authorized;
+    if (!server) { yahooMsg('', 'not connected to the local server'); return; }
+    if (st.redirectUri) $('yahooRedirect').value = st.redirectUri === 'oob' ? '' : st.redirectUri;
+    if (!st.configured) return yahooMsg('', 'add your Yahoo app client id and secret');
+    if (!st.authorized) return yahooMsg('', 'not connected to Yahoo yet');
+    if (!st.league) return yahooMsg('ok', 'connected to Yahoo; choose a league');
+    const lg = st.league;
+    const status = { predraft: 'draft not started', draftinginprogress: 'DRAFT IN PROGRESS', postdraft: 'draft complete' }[lg.draftStatus] || lg.draftStatus;
+    const when = lg.draftTime && lg.draftStatus === 'predraft' ? ' (' + new Date(lg.draftTime).toLocaleString() + ')' : '';
+    const age = st.lastPoll ? Math.round((Date.now() - new Date(st.lastPoll).getTime()) / 1000) + 's ago' : 'never';
+    const order = st.settings && st.settings.orderKnown ? '' : ' · draft order unknown until pick 1 (check My pick in Settings)';
+    yahooMsg(st.error ? 'warn' : 'ok', `${lg.name}: ${status}${when} · ${st.picks} picks · ${st.polling ? 'watching' : 'idle'} · last check ${age}${order}` + (st.error ? ' · error: ' + st.error : ''));
+    if (lg.warnings && lg.warnings.length) $('yahooStatus').innerHTML += '<div class="muted">' + lg.warnings.map(esc).join('<br>') + '</div>';
+  }
+  function useYahooLeague() {
+    const key = $('yahooLeague').value;
+    if (!key) return yahooMsg('warn', 'pick a league first');
+    yahooMsg('', 'loading league…');
+    yahooApi('league', 'POST', { leagueKey: key }).then(r => {
+      state.yahooLeague = key; saveState();
+      applyLeagueSettings(r.settings);
+      toast('League settings imported from Yahoo');
+      renderYahoo(r);
+      return yahooApi('league').then(d => { if (d.picksDetail && d.picksDetail.length) applyYahooPicks(d.picksDetail); });
+    }).catch(e => yahooMsg('warn', e.message));
+  }
+  function bindYahoo() {
+    $('btnYahooSaveCreds').addEventListener('click', () => {
+      yahooApi('config', 'POST', { clientId: $('yahooClientId').value, clientSecret: $('yahooClientSecret').value, redirectUri: $('yahooRedirect').value.trim() || 'oob' })
+        .then(st => { $('yahooClientSecret').value = ''; renderYahoo(st); }).catch(e => yahooMsg('warn', e.message));
+    });
+    $('btnYahooEditCreds').addEventListener('click', () => { $('yahooCreds').hidden = false; });
+    $('btnYahooConnect').addEventListener('click', () => {
+      yahooApi('auth-url').then(r => { window.open(r.url, '_blank', 'noopener'); yahooMsg('', r.redirectUri === 'oob' ? 'approve in the Yahoo tab, then paste the code it shows' : 'approve in the Yahoo tab; if it lands on an error page copy that page\'s URL here'); })
+        .catch(e => yahooMsg('warn', e.message));
+    });
+    $('btnYahooCode').addEventListener('click', () => {
+      const code = $('yahooCode').value.trim(); if (!code) return;
+      yahooMsg('', 'exchanging code…');
+      yahooApi('code', 'POST', { code }).then(st => { $('yahooCode').value = ''; renderYahoo(st); loadYahooLeagues(); toast('Yahoo connected'); }).catch(e => yahooMsg('warn', e.message));
+    });
+    $('btnYahooRefreshLeagues').addEventListener('click', loadYahooLeagues);
+    $('btnYahooUse').addEventListener('click', useYahooLeague);
+    $('btnYahooPoll').addEventListener('click', () => { yahooMsg('', 'fetching…'); yahooApi('poll', 'POST').then(r => { renderYahoo(r); if (r.picks && r.source === 'yahoo') handlePicksEvent(r, 'Fetched'); }).catch(e => yahooMsg('warn', e.message)); });
+    $('btnYahooStop').addEventListener('click', () => { yahooApi('league', 'DELETE').then(st => { state.yahooLeague = null; saveState(); renderYahoo(st); }).catch(e => yahooMsg('warn', e.message)); });
+    $('btnYahooLogout').addEventListener('click', () => { if (!confirm('Forget the Yahoo login stored on the server?')) return; yahooApi('auth', 'DELETE').then(st => { state.yahooLeague = null; saveState(); $('yahooLeague').innerHTML = ''; renderYahoo(st); }).catch(e => yahooMsg('warn', e.message)); });
+  }
 
   // ---------- helpers ----------
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
@@ -414,7 +556,7 @@
       $('parseResult').textContent = (done.length ? 'Filled ' + done.join('; ') + '. ' : '') + (r.warnings.join(' ') || '') + (done.length ? ' Click Save to apply.' : '');
     });
     $('btnResetDraft').addEventListener('click', () => { if (confirm('Clear all picks?')) { state.picks = []; saveState(); $('settingsModal').classList.remove('open'); renderAll(); } });
-    $('btnSync').addEventListener('click', () => { $('syncUrl').value = state.syncUrl || (location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? location.origin : ''); $('syncModal').classList.add('open'); });
+    $('btnSync').addEventListener('click', () => { $('syncUrl').value = state.syncUrl || (location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? location.origin : ''); $('syncModal').classList.add('open'); refreshYahoo(); });
     $('btnSyncClose').addEventListener('click', () => $('syncModal').classList.remove('open'));
     $('btnParsePicks').addEventListener('click', () => {
       const names = E.parsePastedPicks($('pastePicks').value, players);
@@ -430,7 +572,7 @@
       players = buildPool(); saveState(); renderAll();
       $('csvResult').textContent = `Imported ${r.players.length} players. ` + r.warnings.join(' ');
     });
-    $('btnRestoreBuiltin').addEventListener('click', () => { state.customPlayers = null; players = buildPool(); state.picks = state.picks.filter(pk => players.some(p => p.id === pk.playerId)); saveState(); renderAll(); $('csvResult').textContent = 'Built-in data restored.'; });
+    $('btnRestoreBuiltin').addEventListener('click', () => { state.customPlayers = null; state.extraPlayers = []; players = buildPool(); state.picks = state.picks.filter(pk => players.some(p => p.id === pk.playerId)); saveState(); renderAll(); $('csvResult').textContent = 'Built-in data restored.'; });
     $('btnExport').addEventListener('click', () => {
       const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'draft-state.json'; a.click();
@@ -438,7 +580,7 @@
     $('btnImport').addEventListener('click', () => $('importFile').click());
     $('importFile').addEventListener('change', e => {
       const f = e.target.files[0]; if (!f) return;
-      f.text().then(txt => { const s = JSON.parse(txt); state = { settings: Object.assign(E.defaultSettings(), s.settings || {}), picks: s.picks || [], customPlayers: s.customPlayers || null, syncUrl: s.syncUrl || '' }; players = buildPool(); saveState(); renderAll(); toast('Imported'); }).catch(() => toast('Invalid file'));
+      f.text().then(txt => { const s = JSON.parse(txt); state = { settings: Object.assign(E.defaultSettings(), s.settings || {}), picks: s.picks || [], customPlayers: s.customPlayers || null, extraPlayers: s.extraPlayers || [], syncUrl: s.syncUrl || '', yahooLeague: s.yahooLeague || null }; players = buildPool(); saveState(); renderAll(); toast('Imported'); }).catch(() => toast('Invalid file'));
     });
     $('btnHelp').addEventListener('click', () => $('helpModal').classList.add('open'));
     $('btnHelpClose').addEventListener('click', () => $('helpModal').classList.remove('open'));
@@ -452,10 +594,10 @@
 
   // ---------- init ----------
   players.forEach(p => { p._srcTier = p.tier; });
-  bind(); renderTabs(); renderAll();
+  bind(); bindYahoo(); renderTabs(); renderAll();
   if (state.syncUrl) connectSync(state.syncUrl);
   else if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') connectSync(location.origin);
   const meta = window.PLAYER_DATA && window.PLAYER_DATA.generated;
   if (meta) console.log('Player data generated', meta);
-  window.DraftApp = { get state() { return state; }, get calc() { return calc; }, draftPlayer, undoPick, applyNames, renderAll, players: () => players };
+  window.DraftApp = { get state() { return state; }, get calc() { return calc; }, draftPlayer, undoPick, applyNames, applyYahooPicks, applyLeagueSettings, renderAll, players: () => players };
 })();

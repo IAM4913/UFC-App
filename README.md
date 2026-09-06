@@ -12,7 +12,45 @@ State is saved in the browser, so a refresh does not lose the draft.
 3. When you are on the clock the top bar pulses and the **Advice** panel lists the best picks with reasons.
 4. Fell behind? **Sync / Import** → paste the Yahoo *Draft Results* text; every missing pick is applied in order.
 
-## Live auto-sync from the Yahoo draft room (optional)
+## Connect your Yahoo league (official API, recommended)
+
+This is the Draft Dominator style connection: you approve the app once on Yahoo, and from then on the server pulls your
+league's settings and every draft pick straight from the Yahoo Fantasy Sports API. No screen scraping, and the login is
+refreshed automatically for the whole season.
+
+```
+node server.js            # serves the app at http://localhost:3000
+```
+
+1. **Create a Yahoo app** (one time): go to https://developer.yahoo.com/apps/create/, pick *Installed Application*
+   (or *Web Application*), and under *API Permissions* tick **Fantasy Sports → Read**. If the form requires a redirect
+   URI, enter `https://localhost:3000/api/yahoo/callback`. Yahoo shows a **Client ID** and **Client Secret**.
+2. In the app open **Sync / Import → Yahoo account**, paste the Client ID and Secret, and click *Save*. They are written
+   to `yahoo-config.json` next to `server.js` (git-ignored) and never sent to the page again. You can also set the
+   `YAHOO_CLIENT_ID` / `YAHOO_CLIENT_SECRET` environment variables instead.
+3. Click **Connect Yahoo**. A Yahoo tab opens; sign in and click *Agree*.
+   * With no redirect URI (the default, `oob`), Yahoo shows a short code. Paste it in the box and click *Submit code*.
+   * With the `https://localhost:3000/...` redirect URI, the browser lands on an unreachable page. Copy that page's URL
+     from the address bar and paste it in the box instead; the code is pulled out of it.
+   The tokens are saved to `yahoo-tokens.json` (git-ignored) and refreshed automatically.
+4. Pick your league from the dropdown and click **Use this league**. Teams, roster slots, scoring, team names and your
+   draft slot are imported into Settings, and the server starts watching the league's draft results: every 30 s before
+   the draft, every 5 s while it is in progress, and it stops once the draft is complete. New picks appear on the board
+   as they happen, assigned to the team that made them (works for traded picks and auctions too).
+
+Notes:
+* Yahoo does not publish the draft order until the draft starts, so before pick 1 the team order is a guess and
+  **My pick** may be wrong. As soon as round 1 is in, the order and your slot are corrected automatically.
+* The server remembers the selected league (`draft-log.json`) and resumes watching it when restarted.
+* Players not in the projection pool (or in leagues with unusual names) are added as placeholders so pick numbers stay
+  right; they show up with no projection and a "Not in projections" note.
+* Yahoo gives no push notifications, so this is polling. Expect a few seconds of delay in the draft room.
+* The standalone `dist/draft-command.html` cannot do this (the API needs the server-side secret); use the server.
+
+Endpoints (all under `/api/yahoo/`): `status`, `POST config`, `auth-url`, `POST code`, `callback`, `leagues`,
+`GET/POST/DELETE league`, `POST poll`, `DELETE auth`.
+
+## Live auto-sync from the Yahoo draft room (userscript fallback)
 
 ```
 node server.js            # serves the app at http://localhost:3000 and relays picks
@@ -49,10 +87,11 @@ into `SELECTORS` at the top of the userscript, and save. Manual entry and paste-
 | `data/players.json`, `data/raw/` | dataset and the per-position research it was built from |
 | `scripts/build-data.js` | rebuilds `app/players.js` from `data/raw` |
 | `build.js` | bundles the app into `dist/draft-command.html` |
-| `server.js` | local relay server (static files + `/api/sync` + SSE) |
+| `server.js` | local relay server (static files + `/api/sync` + `/api/yahoo/*` + SSE) |
+| `yahoo.js` | Yahoo Fantasy API: OAuth, JSON normalizer, settings mapping, draft poller (unit-tested) |
 | `yahoo-draft-sync.user.js` | Tampermonkey userscript for the Yahoo draft room |
 | `STRATEGY.md` | pick-7 draft strategy for 10- and 12-team half-PPR leagues |
-| `test/` | `node test/engine.test.js`, `node test/smoke.js` (headless Chromium) |
+| `test/` | `node test/engine.test.js`, `node test/yahoo.test.js`, `node test/smoke.js` (headless Chromium) |
 
 ## Updating projections
 
