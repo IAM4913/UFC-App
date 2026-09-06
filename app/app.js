@@ -447,8 +447,10 @@
     });
     $('btnRestoreBuiltin').addEventListener('click', () => { state.customPlayers = null; players = buildPool(); state.picks = state.picks.filter(pk => players.some(p => p.id === pk.playerId)); saveState(); renderAll(); $('csvResult').textContent = 'Built-in data restored.'; });
     $('btnExport').addEventListener('click', () => {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'draft-state.json'; a.click();
+      const txt = JSON.stringify(state, null, 2);
+      const done = () => toast('Draft JSON copied to clipboard');
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done).catch(() => prompt('Copy your draft JSON:', txt));
+      else prompt('Copy your draft JSON:', txt);
     });
     $('btnImport').addEventListener('click', () => $('importFile').click());
     $('importFile').addEventListener('change', e => {
