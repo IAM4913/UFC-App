@@ -50,19 +50,60 @@ if (fs.existsSync(newsFile)) {
     const news = JSON.parse(fs.readFileSync(newsFile, 'utf8'));
     const items = Array.isArray(news) ? news : (news.items || []);
     const idx = {}; all.forEach(p => { idx[E.normalizeName(p.name)] = p; });
+    const STAT_KEYS = ['pass_yds', 'pass_td', 'pass_int', 'rush_att', 'rush_yds', 'rush_td', 'rec', 'rec_yds', 'rec_td', 'fumbles', 'proj_pts_halfppr'];
+    const scale = (p, f) => { STAT_KEYS.forEach(k => { if (p[k]) p[k] = Math.round(p[k] * f * 10) / 10; }); };
     items.forEach(it => {
-      const p = idx[E.normalizeName(it.player)];
-      if (!p) return;
-      const note = `${it.status || it.impact}: ${it.detail || ''}`.trim();
-      if (it.impact === 'out-season' || /out.*season|season.ending|torn (acl|achilles)|ir\b.*season/i.test(String(it.detail))) {
-        if (p.status !== 'out-season') { p.status = 'out-season'; p.notes = (note + ' ' + p.notes).trim(); warnings.push(`NEWS: ${p.name} marked out-season`); }
-      } else if (it.status && p.status === 'healthy' && /injur|suspend|holdout|question|doubtful|pup/i.test(it.status + ' ' + it.impact)) {
-        p.status = it.impact === 'out-weeks' ? 'injured-short' : (/suspend/i.test(it.status + it.impact) ? 'suspended' : 'questionable');
-        p.notes = (note + ' ' + p.notes).trim();
-      }
+      // news items sometimes bundle several names ("A / B / C")
+      String(it.player).split('/').map(x => x.trim()).filter(Boolean).forEach(nm => {
+        const p = idx[E.normalizeName(nm)];
+        if (!p) return;
+        const st = String(it.status || ''), det = String(it.detail || ''), imp = String(it.impact || '');
+        const short = `[${it.date || 'Aug-Sep 2026'}] ${st}${det ? ' - ' + det.slice(0, 160) : ''}`.trim();
+        // Team changes reported after the projection snapshot win.
+        const nt = FIX[String(it.team || '').toUpperCase()] || String(it.team || '').toUpperCase();
+        if (TEAMS.has(nt) && nt !== p.team) { warnings.push(`NEWS: ${p.name} team ${p.team} -> ${nt}`); p.team = nt; }
+        if (imp === 'out-season' || /^(retired|out for (the )?season)/i.test(st)) {
+          p.status = 'out-season';
+        } else if (nt === 'FA' || /unsigned|released|waived|not draftable|cut at/i.test(st + ' ' + imp) && !/re-signed|signed/i.test(st)) {
+          p.status = 'unsigned'; scale(p, 0); p.adp = Math.max(p.adp || 300, 250);
+          warnings.push(`NEWS: ${p.name} unsigned/released -> zeroed`);
+        } else if (imp === 'out-weeks') {
+          p.status = 'injured-short';
+          scale(p, /indefinite|exempt/i.test(st + det) ? 0.55 : 0.72);
+          warnings.push(`NEWS: ${p.name} out-weeks -> projection scaled`);
+        } else if (/suspend/i.test(st + imp)) { p.status = 'suspended'; scale(p, 0.75); }
+        else if (imp === 'questionable' || /questionable|doubtful|50-50|in doubt|pup/i.test(st)) { if (p.status === 'healthy') p.status = 'questionable'; }
+        p.notes = (short + (p.notes ? ' | ' + p.notes : '')).slice(0, 400);
+      });
     });
   } catch (e) { warnings.push('news.json invalid: ' + e.message); }
 }
+// Calibrate each position's projection curve toward typical half-PPR projection benchmarks (rank -> points), since
+// the per-position files came from independent estimates. Blend 50/50 by projection rank; stat lines scale with it.
+const BENCH = {
+  QB: [[1, 372], [3, 350], [6, 328], [12, 295], [18, 270], [24, 245], [32, 215]],
+  RB: [[1, 305], [3, 272], [6, 248], [12, 212], [18, 188], [24, 168], [30, 148], [36, 128], [48, 102], [60, 82], [75, 60]],
+  WR: [[1, 282], [3, 258], [6, 238], [12, 212], [18, 196], [24, 182], [30, 170], [36, 157], [48, 138], [60, 120], [80, 95]],
+  TE: [[1, 212], [3, 172], [6, 146], [12, 120], [18, 102], [24, 90], [30, 75]],
+};
+function benchAt(curve, rank) {
+  if (rank <= curve[0][0]) return curve[0][1];
+  for (let i = 1; i < curve.length; i++) if (rank <= curve[i][0]) { const [r0, v0] = curve[i - 1], [r1, v1] = curve[i]; return v0 + (v1 - v0) * (rank - r0) / (r1 - r0); }
+  return curve[curve.length - 1][1];
+}
+const CAL_W = 0.5;
+const SCALE_KEYS = ['pass_yds', 'pass_td', 'pass_int', 'rush_att', 'rush_yds', 'rush_td', 'rec', 'rec_yds', 'rec_td', 'fumbles'];
+Object.keys(BENCH).forEach(pos => {
+  const list = all.filter(p => p.pos === pos && p.status !== 'out-season' && p.status !== 'unsigned' && p.proj_pts_halfppr > 0)
+    .sort((a, b) => b.proj_pts_halfppr - a.proj_pts_halfppr);
+  list.forEach((p, i) => {
+    const target = benchAt(BENCH[pos], i + 1);
+    const blended = (1 - CAL_W) * p.proj_pts_halfppr + CAL_W * target;
+    const f = blended / p.proj_pts_halfppr;
+    SCALE_KEYS.forEach(k => { if (p[k]) p[k] = Math.round(p[k] * f * 10) / 10; });
+    p.proj_pts_halfppr = Math.round(blended * 10) / 10;
+  });
+});
 // Out-for-season players: keep in pool (so they can be marked drafted) but zero their projection.
 all.forEach(p => { if (p.status === 'out-season') { NUM.slice(3).forEach(k => { if (k !== 'adp' && k !== 'tier' && k !== 'bye') p[k] = 0; }); p.proj_pts_halfppr = 0; p.adp = Math.max(p.adp || 300, 250); } });
 all.sort((a, b) => (a.adp || 300) - (b.adp || 300));

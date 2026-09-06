@@ -5,13 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Draft Command</title>
 <link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <style>
 :root{
   --bg:#0f1319;--panel:#171c24;--panel2:#1e2531;--line:#2a3340;--text:#e6ebf2;--muted:#8d9aab;--accent:#4fd1c5;--accent2:#f6ad55;--danger:#fc8181;--ok:#68d391;
   --qb:#d69e2e;--rb:#48bb78;--wr:#4299e1;--te:#ed64a6;--k:#a0aec0;--def:#9f7aea;
 }
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:13px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:13px/1.35 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color-scheme:dark}
+.num,td.num,.stats,.pill,.board .pt{font-variant-numeric:tabular-nums}
+.topbar h1,.panel h2,.pill.mine,.pill.hot,.rec .head .nm,.badge,.tabs button{font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif}
+.topbar h1{font-size:20px;font-weight:700;letter-spacing:.5px}
+.panel h2{font-size:13px;letter-spacing:1.2px}
+.pill.mine,.pill.hot{font-size:14px;letter-spacing:.6px;text-transform:uppercase}
+.rec .head .nm{font-size:17px;letter-spacing:.2px}
+.badge{font-size:11.5px;letter-spacing:.4px}
+.tabs button{font-size:13px;letter-spacing:.4px;text-transform:uppercase}
+@media (prefers-reduced-motion: reduce){.pill.mine{animation:none}}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 button,input,select,textarea{font:inherit;color:inherit}
 button{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:5px 10px;cursor:pointer}
 button:hover{border-color:var(--accent)}
@@ -29,7 +41,7 @@ a{color:var(--accent)}
 .pill.hot{background:#3b2a12;border-color:var(--accent2);color:var(--accent2);font-weight:700}
 .pill.mine{background:#0f3d38;border-color:var(--accent);color:var(--accent);font-weight:700;animation:pulse 1.2s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(79,209,197,.5)}50%{box-shadow:0 0 0 6px rgba(79,209,197,0)}}
-.layout{display:grid;grid-template-columns:minmax(300px,24%) minmax(520px,1fr) minmax(340px,31%);gap:10px;padding:10px;min-height:calc(100vh - 50px)}
+.layout{display:grid;grid-template-columns:minmax(320px,26%) minmax(500px,1fr) minmax(340px,30%);gap:10px;padding:10px;min-height:calc(100vh - 50px)}
 @media(max-width:1250px){.layout{grid-template-columns:1fr 1fr}.col-right{grid-column:1/-1}}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.col-right{grid-column:auto}}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
@@ -40,12 +52,12 @@ a{color:var(--accent)}
 .board table{border-collapse:collapse;font-size:11px;width:100%}
 .board th{position:sticky;top:0;background:var(--panel2);padding:4px 3px;font-weight:600;border-bottom:1px solid var(--line);white-space:nowrap;max-width:74px;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .board th.me{color:var(--accent)}
-.board td{padding:0;border-bottom:1px solid #202833;border-right:1px solid #202833;height:30px;min-width:64px;vertical-align:middle}
+.board td{padding:0;border-bottom:1px solid #202833;border-right:1px solid #202833;height:30px;min-width:58px;vertical-align:middle}
 .board td.rnd{background:var(--panel2);text-align:center;color:var(--muted);min-width:24px;font-weight:600}
 .board td.me{background:#12201f}
 .board td.cur{outline:2px solid var(--accent2);outline-offset:-2px}
 .board .cell{padding:2px 4px;font-size:10.5px;line-height:1.15;border-left:3px solid transparent;cursor:pointer;height:30px;overflow:hidden}
-.board .cell .nm{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:82px}
+.board .cell .nm{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:76px}
 .board .cell .pt{color:var(--muted);font-size:9.5px}
 .pos-QB{border-left-color:var(--qb)!important}.pos-RB{border-left-color:var(--rb)!important}.pos-WR{border-left-color:var(--wr)!important}.pos-TE{border-left-color:var(--te)!important}.pos-K{border-left-color:var(--k)!important}.pos-DEF{border-left-color:var(--def)!important}
 .badge{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10.5px;font-weight:700;color:#0b0f14}
@@ -75,7 +87,8 @@ table.players td{padding:4px 6px;border-bottom:1px solid #1f2733;white-space:now
 table.players tr:hover td{background:#1c2430}
 table.players td.num{text-align:right;font-variant-numeric:tabular-nums}
 table.players .name{font-weight:600}
-table.players .sub{color:var(--muted);font-size:11px}
+table.players td:nth-child(2){max-width:260px;overflow:hidden;text-overflow:ellipsis}
+table.players .sub{color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:250px}
 .avail{display:inline-block;min-width:36px;text-align:center;border-radius:4px;padding:0 4px;font-weight:600}
 .avail.lo{background:#4a1d1d;color:#feb2b2}.avail.mid{background:#4a3a12;color:#fbd38d}.avail.hi{background:#173a2a;color:#9ae6b4}
 .tag{font-size:10px;padding:1px 5px;border-radius:3px;background:#2d3748;color:#cbd5e0;margin-left:4px}

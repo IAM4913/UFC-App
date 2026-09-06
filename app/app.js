@@ -71,13 +71,16 @@
     state.picks.splice(index, 1);
     saveState(); renderAll();
   }
-  function applyNames(names, source) {
+  function applyNames(names, source, details) {
     const map = {};
     players.forEach(p => { map[E.normalizeName(p.name)] = p; });
     let added = 0, unknown = [];
     for (const n of names) {
       const key = typeof n === 'string' ? E.normalizeName(n) : E.normalizeName(n.name);
-      let p = map[key] || (n.id ? byId()[n.id] : null);
+      const d = details && details[typeof n === 'string' ? n : n.name];
+      let p = null;
+      if (d && d.pos) { const pos = d.pos === 'D/ST' ? 'DEF' : d.pos; p = players.find(x => x.pos === pos && E.normalizeName(x.name) === key) || null; }
+      if (!p) p = map[key] || (n.id ? byId()[n.id] : null);
       if (!p) { const s = E.searchPlayers(players, key, 1); if (s.length && E.normalizeName(s[0].name) === key) p = s[0]; }
       if (!p) { unknown.push(typeof n === 'string' ? n : n.name); continue; }
       if (state.picks.some(x => x.playerId === p.id)) continue;
@@ -105,6 +108,11 @@
       parts.push(c.isMyPick ? `<span class="pill mine">YOU ARE ON THE CLOCK</span>` : `<span class="pill hot">On the clock: ${esc(teamName(c.onClock.teamIdx))}</span>`);
       if (!c.isMyPick && c.nextMyPick) parts.push(`<span class="pill">Your next pick: #${c.nextMyPick} (${c.picksUntilMine} away)</span>`);
       else if (c.isMyPick && c.nextMyPick) parts.push(`<span class="pill">Then #${c.nextMyPick}</span>`);
+    }
+    if (room) {
+      const yp = room.currentPick || room.pickNo;
+      const mismatch = yp && yp !== c.currentPick ? ` <span style="color:var(--danger)">(app is at #${c.currentPick}: paste Draft Results to catch up)</span>` : '';
+      parts.push(`<span class="pill" title="Reported by the Yahoo userscript">Yahoo: ${room.myTurn ? '<b>YOUR TURN</b>' : (room.onClock ? esc(room.onClock) + ' picking' : 'pick ' + (yp || '?'))}${yp ? ' · #' + yp : ''}${room.seconds != null ? ' · ' + room.seconds + 's' : ''}${mismatch}</span>`);
     }
     parts.push(`<span class="pill muted">${s.teams} teams &middot; pick ${s.myPick} &middot; ${E.totalRounds(s)} rds &middot; ${s.scoring.rec == 1 ? 'PPR' : s.scoring.rec == 0.5 ? 'Half PPR' : s.scoring.rec == 0 ? 'Std' : s.scoring.rec + ' PPR'}</span>`);
     $('status').innerHTML = parts.join('');
@@ -138,8 +146,8 @@
     h += '</table>';
     $('board').innerHTML = h;
     // auto-scroll to current round
-    const cur = $('board').querySelector('td.cur');
-    if (cur) cur.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    const board = $('board'), cur = board.querySelector('td.cur');
+    if (cur) { const top = cur.offsetTop - 40; if (top < board.scrollTop || cur.offsetTop + 40 > board.scrollTop + board.clientHeight) board.scrollTop = Math.max(0, top); }
   }
 
   function renderRoster() {
@@ -337,7 +345,8 @@
     state.syncUrl = url; saveState();
     if (!url) { setSyncStatus(false, 'not connected'); return; }
     fetch(url + '/api/state').then(r => r.json()).then(st => {
-      if (st && st.names) { const r = applyNames(st.names, 'sync'); if (r.added) toast(`Synced ${r.added} picks from server`); }
+      if (st && st.names) { const r = applyNames(st.names, 'sync', st.details); if (r.added) toast(`Synced ${r.added} picks from server`); }
+      if (st && st.info) roomInfo(st.info);
     }).catch(() => {});
     es = new EventSource(url + '/api/events');
     es.onopen = () => setSyncStatus(true, 'connected to ' + url);
@@ -345,11 +354,17 @@
     es.addEventListener('picks', ev => {
       try {
         const data = JSON.parse(ev.data);
-        const r = applyNames(data.names || [], 'sync');
+        if (data.info) roomInfo(data.info);
+        const r = applyNames(data.names || [], 'sync', data.details);
         if (r.added) toast(`Auto-synced ${r.added} pick${r.added > 1 ? 's' : ''}`);
         if (r.unknown.length) console.warn('Unknown names from sync:', r.unknown);
       } catch (e) { console.error(e); }
     });
+  }
+  let room = null;
+  function roomInfo(info) {
+    room = info && (info.pickNo || info.currentPick || info.myTurn != null) ? info : null;
+    renderStatus();
   }
   function setSyncStatus(on, msg) { $('syncStatus').innerHTML = `<span class="dot ${on ? 'on' : ''}"></span>${esc(msg)}`; }
 

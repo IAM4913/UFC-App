@@ -13,7 +13,7 @@ const { spawn } = require('child_process');
   try {
     const page = await browser.newPage({ viewport: { width: 1500, height: 950 } });
     page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-    page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
+    page.on('console', m => { if (m.type() === 'error' && !/ERR_TUNNEL|fonts\.g|net::ERR/.test(m.text())) errors.push('console: ' + m.text()); });
     // reset server picks
     await page.request.delete(`http://localhost:${port}/api/picks`);
     await page.goto(`http://localhost:${port}/`);

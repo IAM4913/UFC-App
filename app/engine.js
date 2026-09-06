@@ -10,7 +10,7 @@
   const FLEX_ELIGIBLE = { FLEX: ['RB', 'WR', 'TE'], SFLEX: ['QB', 'RB', 'WR', 'TE'] };
   const BENCH_FACTOR = { QB: 0.15, RB: 0.5, WR: 0.5, TE: 0.15, K: 0, DEF: 0 };
   // Projections for kickers/defenses are unreliable; discount their VBD so they never look like early-round values.
-  const RELIABILITY = { QB: 1, RB: 1, WR: 1, TE: 1, K: 0.3, DEF: 0.4 };
+  const RELIABILITY = { QB: 0.85, RB: 1, WR: 1, TE: 0.9, K: 0.3, DEF: 0.4 };
 
   const SCORING_FIELDS = [
     ['pass_yds', 'Passing yards (pts per yard)', 0.04],
@@ -27,25 +27,31 @@
 
   const PRESETS = {
     yahoo_half: {
-      label: 'Yahoo default (Half PPR, 10 teams)',
+      label: 'Yahoo default (Half PPR, 10 teams, 2 WR)',
+      teams: 10,
+      roster: { QB: 1, RB: 2, WR: 2, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
+      scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 0.5, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
+    },
+    yahoo_ppr: {
+      label: 'Full PPR (10 teams, 2 WR)',
+      teams: 10,
+      roster: { QB: 1, RB: 2, WR: 2, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
+      scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 1, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
+    },
+    yahoo_std: {
+      label: 'Standard (no PPR, 10 teams, 2 WR)',
+      teams: 10,
+      roster: { QB: 1, RB: 2, WR: 2, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
+      scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 0, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
+    },
+    half_3wr: {
+      label: 'Half PPR, 10 teams, 3 WR',
       teams: 10,
       roster: { QB: 1, RB: 2, WR: 3, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
       scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 0.5, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
     },
-    yahoo_ppr: {
-      label: 'Full PPR (10 teams)',
-      teams: 10,
-      roster: { QB: 1, RB: 2, WR: 3, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
-      scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 1, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
-    },
-    yahoo_std: {
-      label: 'Standard (no PPR, 10 teams)',
-      teams: 10,
-      roster: { QB: 1, RB: 2, WR: 3, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
-      scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 0, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
-    },
     half_12: {
-      label: 'Half PPR, 12 teams',
+      label: 'Half PPR, 12 teams, 3 WR',
       teams: 12,
       roster: { QB: 1, RB: 2, WR: 3, TE: 1, FLEX: 1, SFLEX: 0, K: 1, DEF: 1, BN: 6 },
       scoring: { pass_yds: 0.04, pass_td: 4, pass_int: -1, rush_yds: 0.1, rush_td: 6, rec: 0.5, rec_yds: 0.1, rec_td: 6, fumbles: -2, te_rec_bonus: 0 },
@@ -209,16 +215,18 @@
     const draftedCount = {};
     POS.forEach(pos => { draftedCount[pos] = 0; });
     picks.forEach(pk => { const p = byId[pk.playerId]; if (p) draftedCount[p.pos]++; });
-    const replStatic = {}, replDyn = {};
+    const replStatic = {}, replDyn = {}, replDeep = {};
     POS.forEach(pos => {
       const full = byPos[pos];
       const rem = remByPos[pos];
       const idxS = Math.min(Math.max(baseRank[pos] - 1, 0), Math.max(full.length - 1, 0));
       replStatic[pos] = full.length ? proj[full[idxS].id] : 0;
-      let idxD = baseRank[pos] - draftedCount[pos] - 1;
-      if (rem.length === 0) { replDyn[pos] = 0; return; }
-      idxD = Math.min(Math.max(idxD, 0), rem.length - 1);
+      if (rem.length === 0) { replDyn[pos] = 0; replDeep[pos] = 0; return; }
+      const idxD = Math.min(Math.max(baseRank[pos] - draftedCount[pos] - 1, 0), rem.length - 1);
       replDyn[pos] = proj[rem[idxD].id];
+      // Deeper baseline (one more full round of the position) used to value bench depth.
+      const idxDeep = Math.min(Math.max(baseRank[pos] + teams - draftedCount[pos] - 1, 0), rem.length - 1);
+      replDeep[pos] = proj[rem[idxDeep].id];
     });
 
     // Positional runs: how many of the last 6 picks were at each position.
@@ -269,25 +277,41 @@
     }
     const flexOpenN = flexOpen('FLEX');
     const sflexOpenN = flexOpen('SFLEX');
-    const openStarterSlots = POS.reduce((s, pos) => s + starterOpen[pos], 0) + flexOpenN + sflexOpenN;
+    // Only count slots that can still be filled from the remaining pool.
+    const fillable = pos => remByPos[pos].length > 0;
+    const openStarterSlots = POS.reduce((s, pos) => s + (fillable(pos) ? starterOpen[pos] : 0), 0)
+      + (FLEX_ELIGIBLE.FLEX.some(fillable) ? flexOpenN : 0) + (FLEX_ELIGIBLE.SFLEX.some(fillable) ? sflexOpenN : 0);
     const myRemainingPicks = myPickNos.filter(n => n >= currentPick).length;
     const mustFill = myRemainingPicks <= openStarterSlots;
     const rosterFull = myPicks.length >= rounds;
+    // "Forced fill" baseline: if I keep filling one open starter slot per pick, the last one gets filled at this pick.
+    // The expected best available then is what an open slot really costs to leave open.
+    const futureMineAll = myPickNos.filter(n => n >= currentPick);
+    const forcedPick = futureMineAll[Math.min(Math.max(openStarterSlots - 1, 0), futureMineAll.length - 1)] || null;
+    const pAvailForced = {};
+    if (forcedPick) remaining.forEach(p => { pAvailForced[p.id] = pAvailable(p.adp, currentPick, forcedPick, runShift[p.pos]); });
+    const ebaForced = {};
+    POS.forEach(pos => { ebaForced[pos] = forcedPick ? expectedBest(pos, pAvailForced) : ebaNext[pos]; });
 
     function need(pos) {
       if (rosterFull) return 0;
       const open = starterOpen[pos] > 0;
+      const round = onClock ? onClock.round : rounds;
       if (pos === 'K' || pos === 'DEF') {
-        if (!open) return 0.03;
+        if (!open) return 0;
         if (mustFill) return 1.5;
         // Only worth it in the last two rounds unless the roster is otherwise done.
-        return myRemainingPicks <= 2 ? 1.0 : 0.25;
+        return myRemainingPicks <= 2 ? 1.0 : 0.02;
       }
-      if (open) return mustFill ? 1.5 : 1.0;
+      // Open starter slot: grows more urgent as the draft goes on and the pool drains.
+      if (open) return mustFill ? 1.5 : Math.min(1.8, 1.0 + 0.08 * (round - 1));
       if (mustFill) return 0.2;
       if (FLEX_ELIGIBLE.FLEX.includes(pos) && flexOpenN > 0) return 0.9;
       if (FLEX_ELIGIBLE.SFLEX.includes(pos) && sflexOpenN > 0) return 0.9;
-      return { QB: 0.4, RB: 0.75, WR: 0.75, TE: 0.45 }[pos] || 0.5;
+      // Bench depth: worth less with each extra body already held at the position; a 2nd QB/TE is a luxury.
+      const extra = Math.max(0, myCount[pos] - (Number(roster[pos]) || 0) - (FLEX_ELIGIBLE.FLEX.includes(pos) ? 1 : 0));
+      if (pos === 'QB' || pos === 'TE') return (extra === 0 ? 0.25 : 0.08);
+      return 0.75 * Math.pow(0.8, extra);
     }
     const needMult = {};
     POS.forEach(pos => { needMult[pos] = need(pos); });
@@ -306,9 +330,14 @@
       const vorpStatic = (pj - replStatic[p.pos]) * RELIABILITY[p.pos];
       const vona = (pj - ebaNext[p.pos]) * RELIABILITY[p.pos];
       const nm = needMult[p.pos];
+      // Bench picks: once the starter-level baseline gives ~0, value depth against the deeper baseline instead.
+      const benchOnly = starterOpen[p.pos] === 0 && !(FLEX_ELIGIBLE.FLEX.includes(p.pos) && flexOpenN > 0);
+      let vorpEff = vorp;
+      if (benchOnly && (p.pos === 'RB' || p.pos === 'WR')) vorpEff = Math.max(vorp, 0.6 * (pj - replDeep[p.pos]) * RELIABILITY[p.pos], 0.5);
+      else if (!benchOnly && p.pos !== 'K' && p.pos !== 'DEF') vorpEff = Math.max(vorp, (pj - ebaForced[p.pos]) * RELIABILITY[p.pos]);
       // When starters must be filled with the picks left, push those positions to the top regardless of value.
       const fillBonus = (mustFill && starterOpen[p.pos] > 0) ? 10 + 0.1 * pj : 0;
-      const score = nm * (0.55 * vorp + 0.45 * vona) + fillBonus;
+      const score = nm * (0.55 * vorpEff + 0.45 * vona) + fillBonus;
       const posRank = remByPos[p.pos].indexOf(p) + 1;
       const lastInTier = (tierLeft[p.pos][p.tier || 99] || 0) === 1;
       return {
@@ -341,7 +370,7 @@
 
     return {
       currentPick, totalPicks, rounds, draftOver, onClock, isMyPick, nextMyPick, pickAfterNext, picksUntilMine,
-      myPickNos, rows, rowById, proj, replDyn, replStatic, baseRank, flexAlloc, ebaNext, ebaAfter, runCount,
+      myPickNos, rows, rowById, proj, replDyn, replStatic, replDeep, ebaForced, forcedPick, baseRank, flexAlloc, ebaNext, ebaAfter, runCount,
       needMult, myPicks, myCount, starterOpen, flexOpenN, sflexOpenN, mustFill, recs, posSummary, remByPos, draftedCount,
     };
   }
@@ -490,7 +519,12 @@
         // value may be on this line or the next
         let rest = line.replace(re, '');
         let val = parseScoreValue(rest);
-        if (val == null && lines[i + 1]) val = parseScoreValue(lines[i + 1]);
+        if (val == null) {
+          // Yahoo copies a changed row as three lines: "<Stat>", "Yahoo Default", "<league value>\t<default value>".
+          const n1 = lines[i + 1] || '', n2 = lines[i + 2] || '';
+          if (/^\s*yahoo default\s*$/i.test(n1)) val = parseScoreValue(n2.split('\t')[0]);
+          else if (/^\s*-?\d*\.?\d+(\s|$)/.test(n1) || /yards? per point/i.test(n1)) val = parseScoreValue(n1);
+        }
         if (val != null && scoring[key] === undefined) scoring[key] = val;
         break;
       }

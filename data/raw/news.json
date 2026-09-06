@@ -1,0 +1,970 @@
+{
+ "items": [
+  {
+   "player": "Jayden Higgins",
+   "team": "HOU",
+   "pos": "WR",
+   "status": "IR - out for season",
+   "impact": "out-season",
+   "detail": "Tore ACL in joint practice vs Raiders (Aug 4). Second-year WR expected to take a leap; season over. Do not draft. Opens targets for Xavier Hutchinson/Jaylin Noel and trade pickup Kayshon Boutte behind Nico Collins.",
+   "date": "2026-08-04"
+  },
+  {
+   "player": "Ricky Pearsall",
+   "team": "SF",
+   "pos": "WR",
+   "status": "IR - out for season",
+   "impact": "out-season",
+   "detail": "Season-ending surgery on lingering right-knee PCL; placed on IR Aug 1. Targets ~9-month recovery (May 2027). 49ers re-signed Deebo Samuel to replace him.",
+   "date": "2026-08-01"
+  },
+  {
+   "player": "Nick Chubb",
+   "team": "HOU",
+   "pos": "RB",
+   "status": "Retired",
+   "impact": "out-season",
+   "detail": "Announced retirement Aug 21 after 8 seasons (2025 with Texans, where rookie Woody Marks passed him). Remove from draft pool.",
+   "date": "2026-08-21"
+  },
+  {
+   "player": "Brandon Aiyuk",
+   "team": "SF",
+   "pos": "WR",
+   "status": "Reserve/Left Squad - not with team",
+   "impact": "out-season",
+   "detail": "Still on reserve/left squad list, has not reported to the 49ers and says he is not doing business with them; 2026 guarantees voided. Do not draft.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Josh Jacobs",
+   "team": "GB",
+   "pos": "RB",
+   "status": "Commissioner's Exempt List - out indefinitely",
+   "impact": "out-weeks",
+   "detail": "Placed on Commissioner's Exempt List Aug 30, three days after being formally charged with misdemeanor battery and criminal damage to property (May incident). Cannot practice or play; not on 53-man roster. Court appearance Sept 10. Range of games missed 0-17, most likely ~6 under personal conduct policy. ADP fell 60+ spots (biggest faller). Likely starter when he returns but bellcow status in doubt.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "MarShawn Lloyd",
+   "team": "GB",
+   "pos": "RB",
+   "status": "Presumed starter",
+   "impact": "value-up",
+   "detail": "Took all first-team snaps in preseason and is the presumed lead back while Jacobs is out; explosive camp. Biggest ADP riser of the summer (+66 spots to ~pick 83, RB30). Shares with trade pickup Kaleb Johnson and Chris Brooks. Only 61 career snaps/34 carries entering 2026.",
+   "date": "2026-09-01"
+  },
+  {
+   "player": "Kaleb Johnson",
+   "team": "GB",
+   "pos": "RB",
+   "status": "Traded PIT -> GB",
+   "impact": "role-change",
+   "detail": "Packers acquired 2025 3rd-rounder from Pittsburgh (~Aug 25) for a 2028 6th-rounder. Depth/committee candidate behind Lloyd with Jacobs out; rushed 28-69 as a rookie.",
+   "date": "2026-08-25"
+  },
+  {
+   "player": "Tucker Kraft",
+   "team": "GB",
+   "pos": "TE",
+   "status": "Active - expected Week 1 on snap count",
+   "impact": "questionable",
+   "detail": "Activated off PUP July 31 (ACL Nov 2, 2025). Cleared for full contact ~Sept 1. Expected to play Week 1 vs MIN but likely on a snap count; full-go targeted by Week 2-3. Packers working on extension.",
+   "date": "2026-09-02"
+  },
+  {
+   "player": "Jayden Reed",
+   "team": "GB",
+   "pos": "WR",
+   "status": "Day-to-day (ankle)",
+   "impact": "questionable",
+   "detail": "Sat practice Aug 9 with ankle injury; LaFleur said not long-term. On track for Week 1 vs MIN. Listed starter with Christian Watson and Matthew Golden.",
+   "date": "2026-08-09"
+  },
+  {
+   "player": "Isiah Pacheco",
+   "team": "DET",
+   "pos": "RB",
+   "status": "IR - out at least 4 games",
+   "impact": "out-weeks",
+   "detail": "Signed 1-yr with Detroit to be Gibbs' primary backup; missed most of camp with sprained MCL and back injury; placed on IR Sept 1 (back). GM Holmes expects him back this season. Jacob Saylors is now RB2.",
+   "date": "2026-09-01"
+  },
+  {
+   "player": "Jacob Saylors",
+   "team": "DET",
+   "pos": "RB",
+   "status": "RB2 behind Gibbs",
+   "impact": "value-up",
+   "detail": "Top Lions backup for at least the first month with Pacheco on IR; Gibbs handcuff.",
+   "date": "2026-09-01"
+  },
+  {
+   "player": "Jahmyr Gibbs",
+   "team": "DET",
+   "pos": "RB",
+   "status": "Hold-in resolved - full go",
+   "impact": "value-up",
+   "detail": "Sat first six full-team practices in a hold-in, then signed 3-yr, $75M extension (highest-paid RB ever) two days after Bijan Robinson's deal; returned to practice. Contract risk removed; consensus top-2 pick.",
+   "date": "2026-08-01"
+  },
+  {
+   "player": "Sam LaPorta",
+   "team": "DET",
+   "pos": "TE",
+   "status": "Returned to practice (hip)",
+   "impact": "questionable",
+   "detail": "Coming off 2025 season-ending back surgery; hit in the hip in practice, held out; Campbell noncommittal on Week 1 (Aug 20). Returned to practice Aug 25 with no reported setbacks; likely to play Week 1 vs NO (Sept 13).",
+   "date": "2026-08-25"
+  },
+  {
+   "player": "Jordyn Tyson",
+   "team": "NO",
+   "pos": "WR",
+   "status": "IR (designated to return) - out at least 4 games",
+   "impact": "out-weeks",
+   "detail": "No. 8 overall pick strained right hamstring in Aug 13 joint practice; placed on IR Aug 30. Expected to miss ~2 months; earliest return Week 5 (Oct 11 vs MIN). Went from mid-round value to late-round stash.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Alvin Kamara",
+   "team": "NO",
+   "pos": "RB",
+   "status": "Out ~4-6 weeks (MCL sprain); Week 1 in doubt",
+   "impact": "out-weeks",
+   "detail": "Sprained MCL in Aug 18 joint practice vs Cowboys; out at least a month, missed the rest of preseason. Week 1 vs DET (Sept 13) in serious doubt; not on IR. Saints traded for Zamir White (Aug 24) then cut him Aug 30.",
+   "date": "2026-08-18"
+  },
+  {
+   "player": "Travis Etienne",
+   "team": "NO",
+   "pos": "RB",
+   "status": "Lead back",
+   "impact": "value-up",
+   "detail": "Signed 4-yr/$48M with Saints in March; with Kamara out a month, Etienne is the clear early-season lead back in Kellen Moore's up-tempo offense.",
+   "date": "2026-08-19"
+  },
+  {
+   "player": "Chris Olave",
+   "team": "NO",
+   "pos": "WR",
+   "status": "Healthy",
+   "impact": "value-up",
+   "detail": "With rookie Tyson on IR, Olave (100-1,163-9 on 156 targets in 2025) is again the hyper-targeted WR1 for Tyler Shough. Brief camp scare (wind knocked out) was nothing. NOTE: a search snippet claiming Olave is on PUP is FALSE - he is healthy.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Puka Nacua",
+   "team": "LAR",
+   "pos": "WR",
+   "status": "Active - under NFL personal conduct review",
+   "impact": "value-down",
+   "detail": "Not suspended as of Sept 5, but remains under Personal Conduct Policy review over a civil suit alleging he bit a woman's shoulder at a NYE 2025 party; league has no deadline and could discipline after Week 1. Also missed weeks of camp practice with a psoas injury. ADP slipping slightly. Week 1 vs SF in Melbourne (Sept 10).",
+   "date": "2026-09-02"
+  },
+  {
+   "player": "Tutu Atwell",
+   "team": "LAR",
+   "pos": "WR",
+   "status": "Traded MIA -> LAR",
+   "impact": "value-up",
+   "detail": "Rams reacquired Atwell from Miami (~Aug 27) for RB Jarquez Hunter (whom Miami then cut). Listed WR5 but would be the No. 2/3 option if Nacua is suspended or Davante Adams misses time. Deep-league only.",
+   "date": "2026-08-27"
+  },
+  {
+   "player": "Ashton Jeanty",
+   "team": "LV",
+   "pos": "RB",
+   "status": "Ankle sprain - not practicing as of Sept 1; expected Week 1",
+   "impact": "questionable",
+   "detail": "Low/moderate ankle sprain diving for a pass in practice Aug 23; missed preseason finale and had not practiced as of Sept 1 (side work with trainers). HC Klint Kubiak 'Yes' when asked if optimistic for Week 1 vs MIA (Sept 13) and GM/HC say they're counting on him. Kubiak has floated a two-man backfield. ADP slid from ~15 to ~21 overall.",
+   "date": "2026-09-02"
+  },
+  {
+   "player": "Mike Washington Jr.",
+   "team": "LV",
+   "pos": "RB",
+   "status": "RB2 - top handcuff",
+   "impact": "value-up",
+   "detail": "4th-round rookie (6-2, 228, 4.33 40) ran 23-168 (7.3 ypc) in preseason; firmly RB2 behind Jeanty and could start Week 1 if Jeanty is limited. ADP up to the round 10-11 turn; one of the biggest late-August risers.",
+   "date": "2026-08-25"
+  },
+  {
+   "player": "Kirk Cousins",
+   "team": "LV",
+   "pos": "QB",
+   "status": "Named Week 1 starter",
+   "impact": "role-change",
+   "detail": "Kubiak named Cousins the starter Sept 2 over No. 1 overall pick Fernando Mendoza ('he's earned it'). Mendoza is the backup to open the year - redraft value negligible. Stabilizes Brock Bowers/Tre Tucker outlooks.",
+   "date": "2026-09-02"
+  },
+  {
+   "player": "Fernando Mendoza",
+   "team": "LV",
+   "pos": "QB",
+   "status": "Backup to open season",
+   "impact": "value-down",
+   "detail": "No. 1 overall pick lost the camp battle to Kirk Cousins (announced Sept 2). Not a redraft QB1 option to start the year.",
+   "date": "2026-09-02"
+  },
+  {
+   "player": "Brock Bowers",
+   "team": "LV",
+   "pos": "TE",
+   "status": "Fully healthy",
+   "impact": "value-up",
+   "detail": "Back to 100% after 2025 Week 1 knee injury ended his year on IR; star of camp with no brace/tape. Kubiak says the offense is built to feature him; catching passes from Cousins.",
+   "date": "2026-08-15"
+  },
+  {
+   "player": "Jeremiyah Love",
+   "team": "ARI",
+   "pos": "RB",
+   "status": "High ankle sprain - '50-50' for Week 1",
+   "impact": "questionable",
+   "detail": "No. 3 overall pick suffered a high ankle sprain in the Aug 13 preseason opener vs LV; no surgery. HC Mike LaFleur says 'progressing really well'; NFL Network's Garafolo reports 50-50 for Week 1 vs LAC (Sept 13). Was sharing first-team reps with Tyler Allgeier before the injury; team plans to ease him in.",
+   "date": "2026-09-03"
+  },
+  {
+   "player": "Tyler Allgeier",
+   "team": "ARI",
+   "pos": "RB",
+   "status": "Co-lead / likely Week 1 starter",
+   "impact": "value-up",
+   "detail": "Free-agent signing shared first-team reps with Love in camp; with Love 50-50 and Conner on IR, Allgeier is the likely Week 1 lead back and a priority handcuff/waiver add.",
+   "date": "2026-09-01"
+  },
+  {
+   "player": "James Conner",
+   "team": "ARI",
+   "pos": "RB",
+   "status": "IR (designated to return) - out first 4 games",
+   "impact": "out-weeks",
+   "detail": "Still recovering from foot surgery (gruesome Week 3 2025 injury); never returned to team drills. Placed on IR Aug 30; earliest return Week 5 (Oct 11 vs DET). Will return to a much smaller role behind Love/Allgeier.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Trey Benson",
+   "team": "ARI",
+   "pos": "RB",
+   "status": "Waived - unsigned",
+   "impact": "value-down",
+   "detail": "Waived Aug 24 after two injury-riddled seasons; left knee (meniscus) limited him all camp. Not on a roster; do not draft.",
+   "date": "2026-08-24"
+  },
+  {
+   "player": "Jacoby Brissett",
+   "team": "ARI",
+   "pos": "QB",
+   "status": "Starter (context)",
+   "impact": "role-change",
+   "detail": "Context: Cardinals released Kyler Murray in March and named Brissett the starter; Brissett ended a brief contract holdout with a new 1-yr deal before camp. Low-ceiling QB for Marvin Harrison Jr./Trey McBride.",
+   "date": "2026-07-25"
+  },
+  {
+   "player": "Zach Charbonnet",
+   "team": "SEA",
+   "pos": "RB",
+   "status": "Reserve/PUP - out first 4 games",
+   "impact": "out-weeks",
+   "detail": "Torn ACL in January Divisional Round win vs SF; moved to reserve/PUP Aug 30. Earliest return Week 5; projections bumped to ~8 games after more optimistic reports. Stash only.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Jadarian Price",
+   "team": "SEA",
+   "pos": "RB",
+   "status": "Expected lead role (rookie)",
+   "impact": "value-up",
+   "detail": "First-round rookie expected to step into the lead role with Charbonnet out (Kenneth Walker left for KC). Splits with George Holani (listed RB1 on unofficial chart) and FA Emanuel Wilson. Viewed as an RB2 with upside; new OC and Super Bowl hangover risk.",
+   "date": "2026-08-31"
+  },
+  {
+   "player": "George Holani",
+   "team": "SEA",
+   "pos": "RB",
+   "status": "Listed RB1 on unofficial depth chart",
+   "impact": "value-up",
+   "detail": "Listed atop Seattle's Week 1 unofficial depth chart ahead of rookie Price; expected committee for the first month. Deep-league flier/handcuff.",
+   "date": "2026-08-31"
+  },
+  {
+   "player": "George Kittle",
+   "team": "SF",
+   "pos": "TE",
+   "status": "Activated from PUP; trending toward playing Week 1",
+   "impact": "questionable",
+   "detail": "Tore Achilles in January Wild Card vs PHI; activated off PUP Aug 23 (eligible immediately). Dealt with a lingering groin issue that limited practice, but had two positive practice days and made the trip to Melbourne for Thursday Sept 10 vs LAR; 'legitimate chance' to play. Market buying the discount (ADP up ~8 spots).",
+   "date": "2026-09-05"
+  },
+  {
+   "player": "Mike Evans",
+   "team": "SF",
+   "pos": "WR",
+   "status": "Adductor/groin - Week 1 uncertain",
+   "impact": "questionable",
+   "detail": "Signed with SF after 12 years in Tampa; listed WR1. Quad strain early Aug, returned Aug 15, then sidelined by an adductor (groin) injury. Lynch (Sept 1) hoped he'd return to practice the week of Sept 7 and reportedly was back around Sept 1; Week 1 in Melbourne (Sept 10) not guaranteed. Christian Kirk also on IR.",
+   "date": "2026-09-01"
+  },
+  {
+   "player": "Deebo Samuel",
+   "team": "SF",
+   "pos": "WR",
+   "status": "Re-signed with SF; WR2",
+   "impact": "value-up",
+   "detail": "Signed 1-yr deal (up to $7M) July 30 after a season in Washington, effectively replacing Pearsall. Listed WR2 behind Evans; with Kirk on IR and Aiyuk gone, meaningful target share early.",
+   "date": "2026-07-30"
+  },
+  {
+   "player": "Christian Kirk",
+   "team": "SF",
+   "pos": "WR",
+   "status": "IR (designated to return) - out first 4 games",
+   "impact": "out-weeks",
+   "detail": "Calf injury July 26; missed all of preseason; placed on IR-designated to return Aug 30. Earliest return Week 5.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Christian McCaffrey",
+   "team": "SF",
+   "pos": "RB",
+   "status": "Active - managed workload",
+   "impact": "questionable",
+   "detail": "Missed practices from Aug 8 to mid-Aug with unspecified 'tightness'; team framed it as planned load management for a 30-year-old and he returned to 11-on-11 work. Minor durability flag, no change to Week 1 expectation.",
+   "date": "2026-08-10"
+  },
+  {
+   "player": "Emeka Egbuka",
+   "team": "TB",
+   "pos": "WR",
+   "status": "Toe sprain/turf toe - day-to-day",
+   "impact": "questionable",
+   "detail": "Foot rolled up in Aug 12 joint practice vs Jets; missed practice Sept 1. Bowles 'hopeful' for Week 1 vs CIN (Sept 13); team will decide after seeing how he practices the week of Sept 7. Doctors caution turf toe can linger.",
+   "date": "2026-09-02"
+  },
+  {
+   "player": "Bucky Irving",
+   "team": "TB",
+   "pos": "RB",
+   "status": "Full go",
+   "impact": "value-up",
+   "detail": "Shoulder surgery in Dec 2025 fully healed; no restrictions, 'full speed' all camp. Kenny Gainwell is RB2. Injury discount no longer warranted.",
+   "date": "2026-08-05"
+  },
+  {
+   "player": "Breece Hall",
+   "team": "NYJ",
+   "pos": "RB",
+   "status": "Groin strain - expected Week 1",
+   "impact": "questionable",
+   "detail": "Groin strain in early August initially projected 2-3 weeks; Jets trainers expect him ready for Week 1, though he carried a 'questionable' tag on the depth chart. Geno Smith is the Jets' QB.",
+   "date": "2026-08-25"
+  },
+  {
+   "player": "TreVeyon Henderson",
+   "team": "NE",
+   "pos": "RB",
+   "status": "Ankle - has not practiced since Aug 24; Week 1 in danger",
+   "impact": "questionable",
+   "detail": "Right ankle injury Aug 24 (slipped on a cut). A Boston Globe source said he avoided serious injury and should be 'good to go' Week 1, but he hadn't practiced as of Sept 5 and ESPN's Reiss called him no sure thing for the Sept 9 opener at SEA. Listed RB2 behind Stevenson; notable ADP faller.",
+   "date": "2026-09-05"
+  },
+  {
+   "player": "Rhamondre Stevenson",
+   "team": "NE",
+   "pos": "RB",
+   "status": "RB1 on depth chart",
+   "impact": "value-up",
+   "detail": "'Unbelievable' camp; listed RB1 with Henderson RB2 and Corey Kiner (trade from ARI) RB3. Out-carried Henderson 58-30 in the 2025 postseason. Clear early-season lead back if Henderson misses time.",
+   "date": "2026-09-01"
+  },
+  {
+   "player": "Kayshon Boutte",
+   "team": "HOU",
+   "pos": "WR",
+   "status": "Traded NE -> HOU",
+   "impact": "role-change",
+   "detail": "Acquired by Houston in August after the Higgins ACL; listed as a backup behind Collins/Hutchinson/Noel and only in the building a couple of weeks before Week 1. Deep-league only.",
+   "date": "2026-08-20"
+  },
+  {
+   "player": "David Montgomery",
+   "team": "HOU",
+   "pos": "RB",
+   "status": "Listed RB1 but near-even split",
+   "impact": "value-down",
+   "detail": "Acquired from Detroit with $10M guaranteed, but camp reports (NFL Network's Jane Slater) say he'll split lead-back duties close to 50-50 with Woody Marks in a hot-hand approach. ADP may be too high.",
+   "date": "2026-08-23"
+  },
+  {
+   "player": "Woody Marks",
+   "team": "HOU",
+   "pos": "RB",
+   "status": "Near-even split with Montgomery",
+   "impact": "value-up",
+   "detail": "Second-year back gained momentum in camp; Texans used both nearly evenly. Finished 2025 strong after passing Chubb. Undervalued at ADP.",
+   "date": "2026-08-23"
+  },
+  {
+   "player": "Tank Dell",
+   "team": "HOU",
+   "pos": "WR",
+   "status": "IR - designated to return",
+   "impact": "out-weeks",
+   "detail": "Listed IR-R on Houston's Week 1 depth chart while still working back from the 2024 knee injury; out at least the first four games.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Malik Nabers",
+   "team": "NYG",
+   "pos": "WR",
+   "status": "ACL recovery - Week 1 uncertain",
+   "impact": "questionable",
+   "detail": "11 months out from Sept 28, 2025 ACL tear; shed non-contact jersey Aug 31. HC John Harbaugh says it's 'reasonable to assume' he plays Week 1 vs DAL, but Nabers himself (Sept 2-3) would not commit and says he won't force it. Snap count possible early. ADP WR7-8 may not price in the risk.",
+   "date": "2026-09-03"
+  },
+  {
+   "player": "Cam Skattebo",
+   "team": "NYG",
+   "pos": "RB",
+   "status": "Fully recovered - RB1",
+   "impact": "value-up",
+   "detail": "Back from season-ending ankle surgery; full participant all camp, first up in every drill, on track for Week 1 vs DAL. Tyrone Tracy, Najee Harris, Devin Singletary behind him.",
+   "date": "2026-08-20"
+  },
+  {
+   "player": "Kyle Monangai",
+   "team": "CHI",
+   "pos": "RB",
+   "status": "Hyperextended knee - week-to-week; Week 1 in doubt",
+   "impact": "questionable",
+   "detail": "Hyperextended right knee Aug 16 in practice (accidental Grady Jarrett tackle); Ben Johnson still calls him week-to-week (Sept 1). Not placed on IR, so a return within four weeks is expected; Swift says he's running and 'looks good' (Sept 2). Roschon Johnson would be RB2 if he sits Week 1 vs CAR.",
+   "date": "2026-09-01"
+  },
+  {
+   "player": "D'Andre Swift",
+   "team": "CHI",
+   "pos": "RB",
+   "status": "Starter; left Sept 3 practice with cramps",
+   "impact": "value-up",
+   "detail": "ADP up ~3 spots with Monangai week-to-week; still expected to split work when Monangai returns. Left Sept 3 practice early holding his midsection - reported as cramping in heat, not a structural injury; minor designation pending.",
+   "date": "2026-09-03"
+  },
+  {
+   "player": "Luther Burden III",
+   "team": "CHI",
+   "pos": "WR",
+   "status": "Groin - back practicing, on track for Week 1",
+   "impact": "questionable",
+   "detail": "Groin injury Aug 8 (collision with Tyrique Stevenson) cost him the preseason (~1 month). Practicing again in early September; Ben Johnson dismissed it as a non-issue for Week 1 vs CAR (Sept 13). Note: it was a groin, not an ankle, injury.",
+   "date": "2026-09-02"
+  },
+  {
+   "player": "Rome Odunze",
+   "team": "CHI",
+   "pos": "WR",
+   "status": "Left Sept 3 practice (right lower leg) - not expected to miss time",
+   "impact": "questionable",
+   "detail": "Bears WR1 (DJ Moore traded to BUF) had a healthy camp, then exited Sept 3 practice with right lower-leg discomfort and a limp; latest reporting says it isn't expected to keep him out. Stress-fracture history in that foot warrants monitoring.",
+   "date": "2026-09-03"
+  },
+  {
+   "player": "Chuba Hubbard",
+   "team": "CAR",
+   "pos": "RB",
+   "status": "Hamstring - expected ready Week 1; committee",
+   "impact": "value-down",
+   "detail": "Missed much of camp with a right hamstring injury ('week-to-week' in August). Canales expects him ready for Week 1 vs CHI (Sept 13), but the team says it will open in a committee with Jonathon Brooks.",
+   "date": "2026-08-31"
+  },
+  {
+   "player": "Jonathon Brooks",
+   "team": "CAR",
+   "pos": "RB",
+   "status": "RB2, splitting first-team reps",
+   "impact": "value-up",
+   "detail": "Healthy after two ACL tears (missed all of 2025); took first-team reps throughout camp while Hubbard sat, played with the ones in the Buffalo preseason game. One of the fastest ADP risers (Yahoo ADP ~77). Listed ahead of Trevor Etienne and AJ Dillon.",
+   "date": "2026-08-25"
+  },
+  {
+   "player": "Ja'Marr Chase",
+   "team": "CIN",
+   "pos": "WR",
+   "status": "Hyperextended knee - precautionary",
+   "impact": "questionable",
+   "detail": "Slightly hyperextended left knee on a deep route Aug 25; held out of preseason finale as a precaution. Zac Taylor expects him fine for Week 1 vs TB (Sept 13).",
+   "date": "2026-08-25"
+  },
+  {
+   "player": "Tee Higgins",
+   "team": "CIN",
+   "pos": "WR",
+   "status": "Minor - expected fine",
+   "impact": "questionable",
+   "detail": "Missed a late-August practice alongside Chase; Taylor said neither issue is significant and both should be in good shape by end of week. Week 1 vs TB.",
+   "date": "2026-08-26"
+  },
+  {
+   "player": "Deshaun Watson",
+   "team": "CLE",
+   "pos": "QB",
+   "status": "Named Week 1 starter",
+   "impact": "role-change",
+   "detail": "HC Todd Monken named Watson the starter over Dillon Gabriel/Shedeur Sanders (late August). Affects Jerry Jeudy, rookies KC Concepcion (1st round) and Denzel Boston, TE David Njoku is gone (LAC). Quinshon Judkins is RB1 with Dylan Sampson RB2.",
+   "date": "2026-08-27"
+  },
+  {
+   "player": "KC Concepcion",
+   "team": "CLE",
+   "pos": "WR",
+   "status": "Listed starter (rookie)",
+   "impact": "role-change",
+   "detail": "2026 first-round pick listed as a starting WR with Jerry Jeudy and fellow rookie Denzel Boston on Cleveland's unofficial depth chart; Isaiah Bond also in the mix. Jeudy remains the first option to start the year.",
+   "date": "2026-09-02"
+  },
+  {
+   "player": "Rashod Bateman",
+   "team": "BAL",
+   "pos": "WR",
+   "status": "Active - NFL reviewing June arrest",
+   "impact": "value-down",
+   "detail": "Arrested June 3 in Georgia (reckless conduct, battery, criminal property damage) in a family-violence incident; news surfaced ~Aug 20. NFL investigating under personal conduct policy - a violation typically means a 6-game suspension, but no discipline yet. Listed WR2 behind Flowers.",
+   "date": "2026-08-22"
+  },
+  {
+   "player": "Zay Flowers",
+   "team": "BAL",
+   "pos": "WR",
+   "status": "Returned to practice (quad contusion)",
+   "impact": "questionable",
+   "detail": "Quad contusion from a camp collision with S Jaylinn Hawkins; sat the preseason. Returned to practice Sept 3 and is expected to be full-go for Week 1 vs IND (Sept 13). HC Jesse Minter not concerned.",
+   "date": "2026-09-03"
+  },
+  {
+   "player": "Khalil Shakir",
+   "team": "BUF",
+   "pos": "WR",
+   "status": "Questionable (lower body)",
+   "impact": "questionable",
+   "detail": "Dealing with an undisclosed lower-body issue; listed questionable for Week 1 at HOU (Sept 13) per GM Beane's pre-Week 1 update. Slot starter; DJ Moore (trade from CHI) is the new WR1.",
+   "date": "2026-09-03"
+  },
+  {
+   "player": "Keon Coleman",
+   "team": "BUF",
+   "pos": "WR",
+   "status": "Questionable (foot)",
+   "impact": "questionable",
+   "detail": "Foot injury; questionable for Week 1 at HOU. WR3 behind DJ Moore and Shakir; Joshua Palmer next up.",
+   "date": "2026-09-03"
+  },
+  {
+   "player": "Kenneth Walker III",
+   "team": "KC",
+   "pos": "RB",
+   "status": "Clear lead back; minor ankle swelling",
+   "impact": "questionable",
+   "detail": "Signed 3-yr/$43M with KC in March after Super Bowl LX MVP; worked as the clear lead back all camp. Missed practice ~Aug 25-26 with ankle swelling that Andy Reid blamed on a shoe; expected to be fine for Week 1 vs DEN (Mon Sept 14). Rookie Emmett Johnson is RB2 over Emari Demercado.",
+   "date": "2026-08-26"
+  },
+  {
+   "player": "Emmett Johnson",
+   "team": "KC",
+   "pos": "RB",
+   "status": "RB2 (rookie)",
+   "impact": "value-up",
+   "detail": "5th-round rookie was the most impressive Chiefs back in camp/preseason (19-84 rushing, 4 catches); listed RB2 behind Walker. Priority handcuff.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Patrick Mahomes",
+   "team": "KC",
+   "pos": "QB",
+   "status": "Expected to start Week 1 (ACL/LCL recovery)",
+   "impact": "questionable",
+   "detail": "Cleared for all camp activities in late July, ~7 months post ACL/LCL surgery; says he feels great and is on track to start Week 1 vs DEN (Sept 14) pending final game clearance. Chiefs projected to be more run-heavy with Walker; new OC Eric Bieniemy.",
+   "date": "2026-09-01"
+  },
+  {
+   "player": "Xavier Worthy",
+   "team": "KC",
+   "pos": "WR",
+   "status": "Minor shoulder scare - believed OK",
+   "impact": "questionable",
+   "detail": "Left a mid-August practice with a shoulder injury (same shoulder he dislocated in 2025 Week 1) but believed to be OK; listed starter with Rashee Rice and Tyquan Thornton. Rashee Rice faces no 2026 suspension.",
+   "date": "2026-08-15"
+  },
+  {
+   "player": "Cyrus Allen",
+   "team": "KC",
+   "pos": "WR",
+   "status": "Reserve WR - camp standout",
+   "impact": "value-up",
+   "detail": "5th-round rookie was an early camp star with Mahomes; ADP up 87 spots to ~163 though preseason production was modest (6-39). Reserve role to start; WR2 upside only if Rice or Worthy miss time.",
+   "date": "2026-08-25"
+  },
+  {
+   "player": "Kyler Murray",
+   "team": "MIN",
+   "pos": "QB",
+   "status": "Named Week 1 starter",
+   "impact": "role-change",
+   "detail": "Vikings named Murray (1-yr deal after ARI release) the Week 1 starter about two weeks into camp, beating out J.J. McCarthy. Boost for Jefferson/Addison/Jauan Jennings/Hockenson stability; McCarthy is a backup.",
+   "date": "2026-08-12"
+  },
+  {
+   "player": "J.J. McCarthy",
+   "team": "MIN",
+   "pos": "QB",
+   "status": "Backup",
+   "impact": "value-down",
+   "detail": "Lost the starting job to Kyler Murray; listed with Carson Wentz and Max Brosmer as backups. Not draftable in 1-QB redraft.",
+   "date": "2026-08-12"
+  },
+  {
+   "player": "Jordan Mason",
+   "team": "MIN",
+   "pos": "RB",
+   "status": "Co-starter with Aaron Jones",
+   "impact": "value-up",
+   "detail": "Listed 'Aaron Jones OR Jordan Mason'; Mason came in slimmer with more burst and has turned heads all camp (O'Connell praised the improvement). Expected to lead a timeshare (758 yds/6 TD in 2025 vs Jones' 548/2).",
+   "date": "2026-08-20"
+  },
+  {
+   "player": "Aaron Jones Sr.",
+   "team": "MIN",
+   "pos": "RB",
+   "status": "Co-starter - losing ground",
+   "impact": "value-down",
+   "detail": "Listed as co-starter but camp buzz favors Jordan Mason; expect a timeshare with Mason getting the more valuable touches.",
+   "date": "2026-08-20"
+  },
+  {
+   "player": "Michael Penix Jr.",
+   "team": "ATL",
+   "pos": "QB",
+   "status": "QB battle undecided (ACL recovery)",
+   "impact": "questionable",
+   "detail": "Cleared for 11-on-11 ~Aug 20 after Nov 25 ACL surgery; did not play in preseason. HC Kevin Stefanski hasn't named a Week 1 starter (at PIT) between Penix and Tua Tagovailoa; team says Penix will start 'eventually.' Decision expected the week of Sept 7.",
+   "date": "2026-09-03"
+  },
+  {
+   "player": "Tua Tagovailoa",
+   "team": "ATL",
+   "pos": "QB",
+   "status": "QB battle undecided",
+   "impact": "value-down",
+   "detail": "Started preseason games while Penix rehabbed but fumbled twice and struggled to push the ball downfield, failing to lock down the Week 1 job. Near-even market. Affects Bijan/London/Pitts only marginally.",
+   "date": "2026-09-03"
+  },
+  {
+   "player": "Bijan Robinson",
+   "team": "ATL",
+   "pos": "RB",
+   "status": "Hold-in resolved - extension signed",
+   "impact": "value-up",
+   "detail": "Signed a 3-yr extension (~$51M guaranteed) ending his hold-in; full participant. Consensus 1.01 (~23 PPG projection). Brian Robinson Jr. is the listed backup.",
+   "date": "2026-07-30"
+  },
+  {
+   "player": "J.K. Dobbins",
+   "team": "DEN",
+   "pos": "RB",
+   "status": "Soft-tissue injury - on track for Week 1",
+   "impact": "questionable",
+   "detail": "Soft-tissue injury (Aug 10) limited camp and kept him out of all three preseason games as a precaution; Payton says he's 'moving well' and on track for Week 1 vs KC (Sept 14). Listed RB1 ahead of RJ Harvey.",
+   "date": "2026-09-02"
+  },
+  {
+   "player": "RJ Harvey",
+   "team": "DEN",
+   "pos": "RB",
+   "status": "RB2 - committee",
+   "impact": "value-down",
+   "detail": "Listed behind Dobbins; expected to be the primary passing-down back, but rookie 4th-rounder Jonah Coleman is pushing for short-yardage/goal-line work. Analysts see an inconsistent RB3/flex unless Dobbins or Coleman misses time.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Jonah Coleman",
+   "team": "DEN",
+   "pos": "RB",
+   "status": "Rookie - possible goal-line role",
+   "impact": "value-up",
+   "detail": "4th-round rookie 'could earn an immediate role,' most likely short-yardage/goal line; Broncos camp believes he warrants plenty of work. Deep-league flex/stash.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Jaylen Warren",
+   "team": "PIT",
+   "pos": "RB",
+   "status": "Listed RB1",
+   "impact": "value-up",
+   "detail": "Listed RB1 on the initial depth chart (Aug 5) ahead of FA addition Rico Dowdle; Warren the three-down back with Dowdle in early-down work. Kaleb Johnson was traded to GB. Aaron Rodgers QB1 in his announced final season.",
+   "date": "2026-08-05"
+  },
+  {
+   "player": "Rico Dowdle",
+   "team": "PIT",
+   "pos": "RB",
+   "status": "RB2 - early-down role",
+   "impact": "role-change",
+   "detail": "Listed behind Warren but showed 'quickness, speed, vision and power' in camp; some beat reporters believe he could be the unquestioned RB1 once the season starts. Split expected.",
+   "date": "2026-08-05"
+  },
+  {
+   "player": "Bhayshul Tuten",
+   "team": "JAX",
+   "pos": "RB",
+   "status": "Co-starter",
+   "impact": "value-down",
+   "detail": "Listed as co-starter with Chris Rodriguez Jr. after Travis Etienne left for NO; committee lowers Tuten's ceiling. LeQuint Allen and Ameer Abdullah behind.",
+   "date": "2026-08-10"
+  },
+  {
+   "player": "Chris Rodriguez Jr.",
+   "team": "JAX",
+   "pos": "RB",
+   "status": "Co-starter",
+   "impact": "value-up",
+   "detail": "Signed from Washington as an RFA in March; listed as co-starter with Tuten on Jacksonville's depth chart. Late-round value/handcuff.",
+   "date": "2026-08-10"
+  },
+  {
+   "player": "Travis Hunter",
+   "team": "JAX",
+   "pos": "WR/CB",
+   "status": "Starting CB, backup WR",
+   "impact": "value-down",
+   "detail": "Listed as a starting cornerback and only a backup WR behind Brian Thomas Jr. and Jakobi Meyers; Liam Coen calls him the '3A/3B' receiver. Primarily defense in 2026 - limited fantasy WR value.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Jacory Croskey-Merritt",
+   "team": "WAS",
+   "pos": "RB",
+   "status": "Favorite to lead backfield",
+   "impact": "value-up",
+   "detail": "More receiving work in camp; favorite to lead Washington's backfield in carries over FA signing Rachaad White. Potential weekly starter (Draft Sharks riser, Sept 4).",
+   "date": "2026-09-04"
+  },
+  {
+   "player": "Rachaad White",
+   "team": "WAS",
+   "pos": "RB",
+   "status": "Committee / passing downs",
+   "impact": "value-down",
+   "detail": "Signed from Tampa; praised by Dan Quinn in spring but expected to be the 1B/passing-down piece behind Croskey-Merritt.",
+   "date": "2026-09-04"
+  },
+  {
+   "player": "Stefon Diggs",
+   "team": "WAS",
+   "pos": "WR",
+   "status": "Signed 1-yr/$12M; starting WR2",
+   "impact": "value-up",
+   "detail": "Signed Aug 7 (reported Aug 5); listed starter opposite Terry McLaurin. Big upgrade at WR2 that pushed Jayden Daniels up to QB4 in some rankings; slight target dip for TE Chig Okonkwo (FA signing from TEN).",
+   "date": "2026-08-07"
+  },
+  {
+   "player": "Jayden Daniels",
+   "team": "WAS",
+   "pos": "QB",
+   "status": "Healthy; new offense",
+   "impact": "value-up",
+   "detail": "Healthy after an injury-marred 2025; new OC David Blough reportedly gives him more freedom at the line; Diggs added. Ranked QB4-5 consensus.",
+   "date": "2026-09-04"
+  },
+  {
+   "player": "Cam Ward",
+   "team": "TEN",
+   "pos": "QB",
+   "status": "Starter - poor preseason",
+   "impact": "value-down",
+   "detail": "Preseason: 54.2% completions, 0 TD on 24 attempts, 69.1 rating, same footwork/holding-the-ball issues. ADP fell to ~QB25. New HC Robert Saleh/OC Brian Daboll, new WRs Carnell Tate (rookie) and Wan'Dale Robinson with Calvin Ridley.",
+   "date": "2026-08-25"
+  },
+  {
+   "player": "Carnell Tate",
+   "team": "TEN",
+   "pos": "WR",
+   "status": "Listed starter (rookie)",
+   "impact": "value-up",
+   "detail": "Highest-drafted rookie WR; listed starter with Ridley and Wan'Dale Robinson. Projected around PPR WR39; top rookie WR available with Tyson on IR.",
+   "date": "2026-08-10"
+  },
+  {
+   "player": "Makai Lemon",
+   "team": "PHI",
+   "pos": "WR",
+   "status": "Starting slot WR (rookie)",
+   "impact": "role-change",
+   "detail": "No. 20 overall pick projected as the slot starter; DeVonta Smith is the clear WR1 (~128-target projection) and Dontayvion Wicks (trade from GB, 1-yr/$12.5M) WR2 after A.J. Brown was traded to NE in June. Could push a ~20% target share.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Javonte Williams",
+   "team": "DAL",
+   "pos": "RB",
+   "status": "Locked-in RB1",
+   "impact": "value-up",
+   "detail": "Cowboys cut Jaydon Blue at the Aug 30 deadline; Williams sat the entire preseason as the unquestioned RB1 with Malik Davis next. Volume-driven RB2.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Ollie Gordon II",
+   "team": "MIA",
+   "pos": "RB",
+   "status": "Ribs - non-contact jersey",
+   "impact": "questionable",
+   "detail": "Rib injury in late August (non-contact jersey); competing with Jaylen Wright for RB2 behind De'Von Achane. New HC Jeff Hafley wants him to compete as an every-down back. Achane handcuff.",
+   "date": "2026-08-26"
+  },
+  {
+   "player": "Malik Willis",
+   "team": "MIA",
+   "pos": "QB",
+   "status": "Starting QB (context)",
+   "impact": "role-change",
+   "detail": "Miami's starter after Tua was traded to ATL; new HC Jeff Hafley/OC Bobby Slowik. Willis' rushing may cut Achane's checkdown volume; Dolphins WR room (Jalen Tolbert, Malik Washington, rookie Caleb Douglas) has no established WR1 after Tyreek Hill's release and Jaylen Waddle's trade to DEN.",
+   "date": "2026-08-10"
+  },
+  {
+   "player": "Tyreek Hill",
+   "team": "FA",
+   "pos": "WR",
+   "status": "Unsigned free agent - rehabbing knee",
+   "impact": "value-down",
+   "detail": "Released by Miami in February; still rehabbing a major 2025 leg/knee injury and not expected to sign until medically cleared, possibly after the season starts. Do not draft in redraft.",
+   "date": "2026-08-20"
+  },
+  {
+   "player": "Marvin Harrison Jr.",
+   "team": "ARI",
+   "pos": "WR",
+   "status": "Healthy - strong late camp",
+   "impact": "value-up",
+   "detail": "Minor injury scare (sat red-zone drills July 26) was nothing; after viral early drops he 'looked fantastic' the rest of camp. Michael Wilson got a 3-yr extension in late August.",
+   "date": "2026-08-25"
+  },
+  {
+   "player": "Jaydon Blue / Dameon Pierce / Frank Gore Jr. / Will Levis / Mecole Hardman",
+   "team": "FA",
+   "pos": "RB/QB/WR",
+   "status": "Cut at 53-man deadline",
+   "impact": "value-down",
+   "detail": "Notable names released at the Aug 30 cutdown; none currently rosterable in standard redraft unless claimed into a role.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Jarquez Hunter",
+   "team": "FA",
+   "pos": "RB",
+   "status": "Traded to MIA then released",
+   "impact": "value-down",
+   "detail": "Rams traded him to Miami for Tutu Atwell (~Aug 27); Dolphins waived him Aug 30 at cutdown. Not draftable.",
+   "date": "2026-08-30"
+  },
+  {
+   "player": "Zamir White",
+   "team": "FA",
+   "pos": "RB",
+   "status": "Acquired by NO then released",
+   "impact": "value-down",
+   "detail": "Saints traded LB Deion Jones to SF for White on Aug 24 after Kamara's MCL sprain, then released him Aug 30 at cutdown. Not draftable.",
+   "date": "2026-08-30"
+  }
+ ],
+ "sources": [
+  "https://www.fantasypoints.com/nfl/articles/2026/nfl-preseason-injury-news-fantasy-football-impact",
+  "https://sports.yahoo.com/fantasy/article/nfl-training-camp-injury-report-tracking-the-latest-news-updates-for-2026-fantasy-football-163938278.html",
+  "https://www.sharpfootballanalysis.com/analysis/nfl-injury-report-ir-tracker/",
+  "https://www.fantasypros.com/2026/09/20-fantasy-football-injuries-to-monitor-2026/",
+  "https://www.fantasypros.com/2026/08/13-fantasy-football-injuries-to-monitor-2026/",
+  "https://www.fantasypros.com/2026/09/14-fantasy-football-adp-risers-fallers-2026/",
+  "https://sports.yahoo.com/fantasy/article/2026-fantasy-football-marshawn-lloyd-treveyon-henderson-among-biggest-adp-risers-fallers-as-of-sept-1-142718983.html",
+  "https://sports.yahoo.com/fantasy/article/2026-fantasy-football-mike-washington-jr-cam-ward-among-biggest-adp-risers-fallers-as-of-august-25-143159599.html",
+  "https://www.draftsharks.com/article/fantasy-football-risers-and-fallers",
+  "https://www.espn.com/nfl/story/_/id/49774523/packers-rb-josh-jacobs-placed-commission-exempt-list",
+  "https://sports.yahoo.com/fantasy/article/fantasy-football-impact-of-nfl-placing-packers-rb-josh-jacobs-on-commissioner-exempt-list-202836289.html",
+  "https://www.foxnews.com/outkick-sports/nfl-conduct-policy-review-puka-nacua-continues-drives-fantasy-football-managers-nuts",
+  "https://www.espn.com/nfl/story/_/id/49685741/nfl-reviewing-ravens-wr-bateman-family-violence-arrest",
+  "https://sports.yahoo.com/nfl/article/texans-wr-jayden-higgins-tears-acl-in-training-camp-will-miss-2026-nfl-season-025228261.html",
+  "https://www.nfl.com/news/niners-wr-ricky-pearsall-knee-surgery-will-miss-2026-season",
+  "https://www.49erswebzone.com/articles/201936-pearsall-season-ending-announce-samuel-signing/",
+  "https://www.espn.com/nfl/story/_/id/49686432/running-back-nick-chubb-announces-retirement-nfl",
+  "https://www.nfl.com/news/niners-place-brandon-aiyuk-on-reserve-left-squad-list-ending-wr-s-season",
+  "https://www.nbcsports.com/fantasy/football/player-news/2026-08-30/christian-kirk-calf-starts-the-season-on-ir",
+  "https://www.profootballrumors.com/2026/09/cardinals-rb-jeremiyah-love-50-50-for-week-1",
+  "https://www.draftsharks.com/fantasy-football-news/82412/james-conner-to-open-2026-on-ir-missing-cardinals-first-4-games",
+  "https://www.nbcsports.com/fantasy/football/player-news/2026-08-24/cardinals-waive-trey-benson-knee",
+  "https://www.nbcsports.com/fantasy/football/player-news/2026-08-30/jordyn-tyson-lands-on-ir-out-at-least-four-games",
+  "https://www.cbssports.com/nfl/news/alvin-kamara-injury-saints-mcl-sprain-running-back-options/",
+  "https://www.espn.com/nfl/story/_/id/49707873/sources-49ers-trade-zamir-white-saints-deion-jones",
+  "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/saints-release-zamir-white",
+  "https://www.espn.com/nfl/story/_/id/49796729/detroit-lions-place-rb-isiah-pacheco-injured-reserve",
+  "https://www.thescore.com/nfl/news/3583040/lions-la-porta-dealing-with-hip-injury-status-for-week-1-uncertain",
+  "https://www.si.com/onsi/fantasy/news/jahmyr-gibbs-record-setting-extension-keeps-fantasy-football-s-rb1-race-wide-open",
+  "https://www.espn.com/nfl/story/_/id/49490010/2026-training-camp-holdin-tracking-updates-bijan-robinson-jahmyr-gibbs-vita-vea-tuli-tuipulotu",
+  "https://www.profootballrumors.com/2026/08/zach-charbonnet-shifts-to-reserve-pup-list-seahawks-reduce-roster-to-53",
+  "https://www.fieldgulls.com/seattle-seahawks-roster/173896/seahawks-unofficial-2026-regular-season-depth-chart-revealed",
+  "https://www.espn.com/nfl/story/_/id/49708202/raiders-rb-jeanty-believed-sprained-ankle",
+  "https://www.nbcsports.com/fantasy/football/player-news/2026-09-02/kubiak-optimistic-jeanty-will-play-week-1",
+  "https://www.nfl.com/news/raiders-name-kirk-cousins-starting-fernando-mendoza-officially-backup",
+  "https://www.rotoballer.com/player-news/brock-bowers-fully-healthy-ahead-of-training-camp/1890446",
+  "https://www.espn.com/nfl/story/_/id/49631705/49ers-george-kittle-eyes-return-practice-opener-australia",
+  "https://sports.yahoo.com/articles/49ers-george-kittle-makes-return-015004525.html",
+  "https://sports.yahoo.com/articles/mike-evans-injury-49ers-being-225614723.html",
+  "https://www.pressdemocrat.com/2026/08/10/mccaffrey-sits-out-practice-with-tightness-as-the-49ers-manage-his-workload/",
+  "https://www.49ers.com/news/49ers-to-open-2026-season-vs-rams-in-melbourne-on-sept-10",
+  "https://www.upi.com/Sports_News/NFL/2026/08/12/Buccaneers-Emeka-Egbuka-injury-training-camp/1521786551988/",
+  "https://www.buccaneers.com/news/bucky-irving-full-go-feeling-stronger-from-adversity",
+  "https://985thesportshub.com/2026/09/02/treveyon-henderson-injury-update-patriots/",
+  "https://www.rotoballer.com/player-news/rhamondre-stevenson-gaining-steam-as-the-no-1-rb-for-patriots/1922305",
+  "https://www.cbssports.com/nfl/news/malik-nabers-injury-status-giants-wr-shares-honest-assessment-of-progress-week-1-availability/",
+  "https://www.nfl.com/news/giants-rb-cam-skattebo-i-ll-be-ready-to-go-week-1",
+  "https://www.si.com/nfl/bears/onsi/kyle-monangai-injury-update-following-chicago-bears-53-man-roster-cuts",
+  "https://chicago.suntimes.com/bears/2026/09/03/bears-practice-report-rb-dandre-swift-wr-rome-odunze-leave-with-injuries",
+  "https://www.cbssports.com/nfl/news/luther-burden-bears-injury-miss-preseason/",
+  "https://www.foxsports.com/stories/nfl/carolina-panthers-running-back-chuba-hubbard-injury",
+  "https://www.si.com/onsi/fantasy/nfl/6-fantasy-football-preseason-adp-risers-jonathon-brooks-shoots-up-the-rankings",
+  "https://www.si.com/nfl/bengals/onsi/ja-marr-chase-s-latest-practice-status-revealed-following-knee-injury-in-training-camp-01m0yx08fas5",
+  "https://www.centraloregondaily.com/sports/browns-name-deshaun-watson-starting-qb-for-week-1-of-2026-nfl-season/article_cb6266d4-4e2c-57e2-bf20-c9fdc350cba8.html",
+  "https://www.baltimoreravens.com/news/zay-flowers-day-to-day-quad-contusion-training-camp-injury-2026",
+  "https://www.buffalobills.com/news/bills-gm-brandon-beane-provides-team-injury-updates-prior-to-week-1-of-2026-season",
+  "https://www.profootballnetwork.com/kenneth-walker-chiefs-foot-injury-depth-week-1-2026/",
+  "https://bleacherreport.com/articles/25488867-kenneth-walker-iiis-ankle-injury-caused-shoe-issue-chiefs-andy-reid-says",
+  "https://www.nfl.com/news/chiefs-qb-patrick-mahomes-knee-fully-cleared-to-participate-in-training-camp",
+  "https://www.espn.com/nfl/story/_/id/49500558/2026-kansas-city-chiefs-training-camp-cyrus-allen-patrick-mahomes",
+  "https://sports.yahoo.com/articles/rashee-rice-not-expected-suspended-150114356.html",
+  "https://www.nfl.com/news/vikings-name-kyler-murray-starting-week-1-quarterback-for-2026-season",
+  "https://sports.yahoo.com/articles/vikings-jordan-mason-turning-heads-143102533.html",
+  "https://www.espn.com/nfl/story/_/id/49673266/tua-tagovailoa-michael-penix-jr-nfl-season-opener-nears-atlanta-falcons-dont-qb1",
+  "https://www.cbssports.com/fantasy/football/news/broncos-j-k-dobbins-ready-for-week-1/",
+  "https://www.si.com/onsi/fantasy/nfl/denver-broncos-depth-chart-rj-harvey-rb5-jk-dobbins-rb1",
+  "https://www.nbcsports.com/fantasy/football/player-news/2026-08-05/steelers-list-warren-as-rb1-on-first-depth-chart",
+  "https://www.jaguars.com/news/jaguars-2026-training-camp-first-unofficial-depth-chart-released",
+  "https://bleacherreport.com/articles/25474358-travis-hunters-spot-jaguars-wr-depth-chart-revealed-liam-coen-ahead-2026-season",
+  "https://www.washingtonpost.com/sports/2026/08/05/washington-commanders-sign-wide-receiver-stefon-diggs/",
+  "https://www.si.com/onsi/fantasy/rankings/preseason-training-camp-fallers-busts-fantasy-football-cam-ward",
+  "https://sports.yahoo.com/articles/eagles-trade-j-brown-patriots-204243114.html",
+  "https://www.cbssports.com/fantasy/football/news/cowboys-javonte-williams-locked-atop-depth-chart-after-cuts/",
+  "https://www.espn.com/nfl/story/_/id/49564317/dolphins-rbs-devon-achane-heavy-workload-fantasy-ollie-gordon-jaylen-wright",
+  "https://www.cbssports.com/nfl/news/nfl-free-agency-tyreek-hill/",
+  "https://www.nfl.com/news/dolphins-trading-wr-jaylen-waddle-to-broncos-for-draft-picks-including-2026-first-rounder",
+  "https://www.espn.com/nfl/story/_/id/49744695/dolphins-trade-tutu-atwell-rams-jarquez-hunter",
+  "https://www.nbcsports.com/fantasy/football/player-news/2026-08-30/dolphins-cut-trade-acquisition-jarquez-hunter",
+  "https://www.espn.com/nfl/story/_/id/48915601/2026-nfl-offseason-trade-grades-best-worst-moves-training-camp-preseason",
+  "https://www.espn.com/nfl/story/_/id/49681232/2026-nfl-cuts-all-32-teams-cutdown-moves-updates-tracker",
+  "https://www.nbcsports.com/fantasy/football/player-news/2026-07-23/david-montgomery-to-lead-texans-backfield-split",
+  "https://www.fantasynerds.com/news/story/2026/08/23/houston-texans-running-backs-woody-marks-gaining-momentum-in-backfield-split-1603961",
+  "https://www.si.com/nfl/texans/onsi/texans-updated-depth-chart-after-latest-roster-cuts",
+  "https://sports.yahoo.com/articles/travis-etienne-signs-saints-why-180134856.html",
+  "https://www.si.com/nfl/every-player-suspended-start-season",
+  "https://sports.yahoo.com/articles/fantasy-football-rookie-rankings-2026-152018369.html",
+  "https://www.espn.com/nfl/story/_/id/49497140/packers-star-te-tucker-kraft-activated-pup-acl-recovery",
+  "https://www.nbcsports.com/fantasy/football/player-news/2026-08-09/jayden-reed-ankle-sits-out-practice-on-sunday",
+  "https://www.giants.com/news/isaiah-likely-signing-2026-nfl-free-agency-baltimore-ravens-john-harbaugh-tight-end-coastal-carolina",
+  "https://www.commanders.com/news/chig-okonkwo-looking-to-become-player-that-i-know-i-can-be-with-commanders",
+  "https://www.nbcsports.com/fantasy/football/player-news/2026-09-03/dandre-swift-exits-practice-early-on-thursday"
+ ]
+}

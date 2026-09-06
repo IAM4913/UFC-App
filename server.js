@@ -10,12 +10,14 @@ const APP_DIR = path.join(__dirname, 'app');
 const LOG = path.join(__dirname, 'draft-log.json');
 
 let names = []; // ordered list of drafted player names, as reported by the userscript / app
+let details = {}; // name -> {pos, team} when known
+let info = {};    // latest draft-room info from the userscript (current pick, whose turn)
 try { names = JSON.parse(fs.readFileSync(LOG, 'utf8')).names || []; } catch (e) { names = []; }
 const clients = new Set();
 
 function persist() { try { fs.writeFileSync(LOG, JSON.stringify({ names, updated: new Date().toISOString() }, null, 2)); } catch (e) { /* ignore */ } }
 function broadcast() {
-  const msg = `event: picks\ndata: ${JSON.stringify({ names })}\n\n`;
+  const msg = `event: picks\ndata: ${JSON.stringify({ names, details, info })}\n\n`;
   for (const res of clients) { try { res.write(msg); } catch (e) { clients.delete(res); } }
 }
 function cors(res) {
@@ -35,13 +37,13 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/api/events') {
     cors(res);
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' });
-    res.write(`event: picks\ndata: ${JSON.stringify({ names })}\n\n`);
+    res.write(`event: picks\ndata: ${JSON.stringify({ names, details, info })}\n\n`);
     clients.add(res);
     const ping = setInterval(() => { try { res.write(': ping\n\n'); } catch (e) { clearInterval(ping); } }, 15000);
     req.on('close', () => { clients.delete(res); clearInterval(ping); });
     return;
   }
-  if (url.pathname === '/api/state') return json(res, 200, { names, count: names.length });
+  if (url.pathname === '/api/state') return json(res, 200, { names, details, info, count: names.length });
   if (url.pathname === '/api/players') {
     // Player names for the userscript matcher.
     try {
@@ -61,13 +63,15 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/api/sync' && req.method === 'POST') {
     // Full ordered list from the userscript. Append anything new, in order.
     const b = await body(req);
-    const list = Array.isArray(b.names) ? b.names.map(x => String(x).trim()).filter(Boolean) : [];
+    const list = Array.isArray(b.picks) ? b.picks.map(x => ({ name: String(x.name || '').trim(), pos: x.pos || '', team: x.team || '' })).filter(x => x.name)
+      : (Array.isArray(b.names) ? b.names.map(x => ({ name: String(x).trim() })).filter(x => x.name) : []);
     let added = 0;
-    for (const n of list) if (!names.includes(n)) { names.push(n); added++; }
-    if (added) { persist(); broadcast(); }
+    for (const p of list) if (!names.includes(p.name)) { names.push(p.name); details[p.name] = p; added++; }
+    if (b.info && typeof b.info === 'object') info = Object.assign({ layer: b.layer, updated: Date.now() }, b.info);
+    if (added || b.info) { if (added) persist(); broadcast(); }
     return json(res, 200, { ok: true, added, count: names.length });
   }
-  if (url.pathname === '/api/picks' && req.method === 'DELETE') { names = []; persist(); broadcast(); return json(res, 200, { ok: true }); }
+  if (url.pathname === '/api/picks' && req.method === 'DELETE') { names = []; details = {}; info = {}; persist(); broadcast(); return json(res, 200, { ok: true }); }
 
   // static files
   let file = url.pathname === '/' ? '/index.html' : url.pathname;
