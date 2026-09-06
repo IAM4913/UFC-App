@@ -69,6 +69,7 @@ const { spawn } = require('child_process');
     console.log('status:', status.replace(/\s+/g, ' ').trim());
     const advice = await page.textContent('#advice');
     console.log('advice head:', advice.replace(/\s+/g, ' ').trim().slice(0, 200));
+    await page.evaluate(() => { document.querySelector('.tablewrap').scrollLeft = 0; });
     await page.screenshot({ path: path.join(__dirname, '..', 'dist', 'screenshot.png'), fullPage: false });
   } catch (e) { errors.push('test: ' + e.message); }
   await browser.close();
