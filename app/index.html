@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draft Command</title>
+<link rel="icon" href="data:,">
+<style>
+:root{
+  --bg:#0f1319;--panel:#171c24;--panel2:#1e2531;--line:#2a3340;--text:#e6ebf2;--muted:#8d9aab;--accent:#4fd1c5;--accent2:#f6ad55;--danger:#fc8181;--ok:#68d391;
+  --qb:#d69e2e;--rb:#48bb78;--wr:#4299e1;--te:#ed64a6;--k:#a0aec0;--def:#9f7aea;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:13px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:5px 10px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:#08201d;border-color:var(--accent);font-weight:600}
+button.danger{border-color:var(--danger);color:var(--danger)}
+button.small{padding:2px 7px;font-size:12px}
+input[type=text],input[type=number],select,textarea{background:#0b0f14;border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+input[type=number]{width:64px}
+textarea{width:100%;min-height:120px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+a{color:var(--accent)}
+.topbar{display:flex;align-items:center;gap:14px;padding:8px 14px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;flex-wrap:wrap}
+.topbar h1{font-size:16px;margin:0;letter-spacing:.3px}
+.topbar .status{display:flex;gap:16px;align-items:center;flex:1;flex-wrap:wrap}
+.pill{padding:3px 10px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);white-space:nowrap}
+.pill.hot{background:#3b2a12;border-color:var(--accent2);color:var(--accent2);font-weight:700}
+.pill.mine{background:#0f3d38;border-color:var(--accent);color:var(--accent);font-weight:700;animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(79,209,197,.5)}50%{box-shadow:0 0 0 6px rgba(79,209,197,0)}}
+.layout{display:grid;grid-template-columns:minmax(300px,24%) minmax(520px,1fr) minmax(340px,31%);gap:10px;padding:10px;min-height:calc(100vh - 50px)}
+@media(max-width:1250px){.layout{grid-template-columns:1fr 1fr}.col-right{grid-column:1/-1}}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.col-right{grid-column:auto}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.panel h2{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:0;display:flex;justify-content:space-between;align-items:center}
+.col{display:flex;flex-direction:column;gap:10px;min-width:0}
+/* draft board */
+.board{overflow:auto;max-height:52vh;border:1px solid var(--line);border-radius:6px}
+.board table{border-collapse:collapse;font-size:11px;width:100%}
+.board th{position:sticky;top:0;background:var(--panel2);padding:4px 3px;font-weight:600;border-bottom:1px solid var(--line);white-space:nowrap;max-width:74px;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.board th.me{color:var(--accent)}
+.board td{padding:0;border-bottom:1px solid #202833;border-right:1px solid #202833;height:30px;min-width:64px;vertical-align:middle}
+.board td.rnd{background:var(--panel2);text-align:center;color:var(--muted);min-width:24px;font-weight:600}
+.board td.me{background:#12201f}
+.board td.cur{outline:2px solid var(--accent2);outline-offset:-2px}
+.board .cell{padding:2px 4px;font-size:10.5px;line-height:1.15;border-left:3px solid transparent;cursor:pointer;height:30px;overflow:hidden}
+.board .cell .nm{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:82px}
+.board .cell .pt{color:var(--muted);font-size:9.5px}
+.pos-QB{border-left-color:var(--qb)!important}.pos-RB{border-left-color:var(--rb)!important}.pos-WR{border-left-color:var(--wr)!important}.pos-TE{border-left-color:var(--te)!important}.pos-K{border-left-color:var(--k)!important}.pos-DEF{border-left-color:var(--def)!important}
+.badge{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10.5px;font-weight:700;color:#0b0f14}
+.badge.QB{background:var(--qb)}.badge.RB{background:var(--rb)}.badge.WR{background:var(--wr)}.badge.TE{background:var(--te)}.badge.K{background:var(--k)}.badge.DEF{background:var(--def)}
+/* roster */
+.roster{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:12px}
+.roster .slot{display:flex;gap:6px;align-items:center;padding:3px 6px;border-radius:5px;background:var(--panel2)}
+.roster .slot .lab{width:42px;color:var(--muted);font-weight:600;font-size:11px}
+.roster .slot.empty{color:#556}
+/* search */
+.searchwrap{position:relative}
+.searchwrap input{width:100%;font-size:16px;padding:10px 12px;border-radius:8px;border:2px solid var(--line)}
+.searchwrap input:focus{outline:none;border-color:var(--accent)}
+.dropdown{position:absolute;left:0;right:0;top:100%;background:var(--panel2);border:1px solid var(--line);border-radius:8px;z-index:20;max-height:320px;overflow:auto;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.dropdown div{padding:7px 10px;display:flex;justify-content:space-between;gap:8px;cursor:pointer;border-bottom:1px solid #222b37}
+.dropdown div.active,.dropdown div:hover{background:#26303f}
+.dropdown .meta{color:var(--muted);font-size:12px}
+.pickfor{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tabs button{padding:3px 9px}
+.tabs button.on{background:var(--accent);color:#08201d;border-color:var(--accent);font-weight:700}
+.tablewrap{overflow:auto;max-height:calc(100vh - 250px);border:1px solid var(--line);border-radius:6px}
+table.players{border-collapse:collapse;width:100%;font-size:12px}
+table.players th{position:sticky;top:0;background:var(--panel2);text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+table.players th.sorted{color:var(--accent)}
+table.players td{padding:4px 6px;border-bottom:1px solid #1f2733;white-space:nowrap}
+table.players tr:hover td{background:#1c2430}
+table.players td.num{text-align:right;font-variant-numeric:tabular-nums}
+table.players .name{font-weight:600}
+table.players .sub{color:var(--muted);font-size:11px}
+.avail{display:inline-block;min-width:36px;text-align:center;border-radius:4px;padding:0 4px;font-weight:600}
+.avail.lo{background:#4a1d1d;color:#feb2b2}.avail.mid{background:#4a3a12;color:#fbd38d}.avail.hi{background:#173a2a;color:#9ae6b4}
+.tag{font-size:10px;padding:1px 5px;border-radius:3px;background:#2d3748;color:#cbd5e0;margin-left:4px}
+.tag.warn{background:#5a2d2d;color:#feb2b2}
+.tag.tier{background:#2c3e50;color:#bee3f8}
+/* advice */
+.rec{background:var(--panel2);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.rec.top{border-left-color:var(--accent2);background:#221d14}
+.rec .head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.rec .head .nm{font-size:14px;font-weight:700}
+.rec ul{margin:0;padding-left:16px;color:#c9d2de;font-size:12px}
+.rec .stats{display:flex;gap:10px;color:var(--muted);font-size:11.5px;flex-wrap:wrap}
+table.pos{border-collapse:collapse;width:100%;font-size:11.5px}
+table.pos th,table.pos td{padding:3px 5px;border-bottom:1px solid #1f2733;text-align:right;white-space:nowrap}
+table.pos th:first-child,table.pos td:first-child{text-align:left}
+table.pos th{color:var(--muted);font-weight:600}
+.run{color:var(--accent2);font-weight:700}
+.muted{color:var(--muted)}
+.notes{font-size:12px;white-space:pre-wrap;max-height:260px;overflow:auto;color:#c9d2de;line-height:1.4}
+details summary{cursor:pointer;color:var(--muted);font-size:12px}
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-start;justify-content:center;z-index:50;overflow:auto;padding:30px 10px}
+.modal-bg.open{display:flex}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;width:min(900px,100%);display:flex;flex-direction:column;gap:12px}
+.modal h3{margin:0;font-size:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
+.fields{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;font-size:12px}
+.fields label{color:var(--muted)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#233043;border:1px solid var(--accent);padding:8px 14px;border-radius:8px;z-index:60;display:none}
+.kbd{font-family:ui-monospace,Menlo,monospace;background:#0b0f14;border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:11px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#555;margin-right:5px}
+.dot.on{background:var(--ok)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>🏈 Draft Command</h1>
+  <div class="status" id="status"></div>
+  <div class="row">
+    <button id="btnUndo" title="Undo last pick (Ctrl+Z)">↶ Undo</button>
+    <button id="btnSync">Sync / Import</button>
+    <button id="btnSettings">⚙ Settings</button>
+    <button id="btnHelp">?</button>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="col col-left">
+    <div class="panel">
+      <h2>Draft board <span class="muted" id="boardMeta"></span></h2>
+      <div class="board" id="board"></div>
+    </div>
+    <div class="panel">
+      <h2>My roster <span id="rosterMeta" class="muted"></span></h2>
+      <div class="roster" id="roster"></div>
+    </div>
+  </div>
+
+  <div class="col col-center">
+    <div class="panel">
+      <div class="searchwrap">
+        <input id="search" type="text" placeholder="Type a player who was just drafted, then Enter  (press / to focus)" autocomplete="off" spellcheck="false">
+        <div class="dropdown" id="dropdown" hidden></div>
+      </div>
+      <div class="pickfor">
+        <span>Assign pick to:</span>
+        <select id="pickTeam"></select>
+        <span id="pickHint"></span>
+        <span style="flex:1"></span>
+        <label><input type="checkbox" id="hideDrafted" checked> hide drafted</label>
+      </div>
+      <div class="tabs" id="posTabs"></div>
+      <div class="tablewrap"><table class="players" id="players"></table></div>
+    </div>
+  </div>
+
+  <div class="col col-right">
+    <div class="panel" id="advicePanel">
+      <h2>Advice <span class="muted" id="adviceMeta"></span></h2>
+      <div id="advice"></div>
+    </div>
+    <div class="panel">
+      <h2>Position outlook</h2>
+      <div id="posOutlook"></div>
+    </div>
+    <div class="panel">
+      <h2>Round plan</h2>
+      <div class="notes" id="planNotes"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Settings modal -->
+<div class="modal-bg" id="settingsModal">
+  <div class="modal">
+    <h3>League settings</h3>
+    <div class="row">
+      <label>Preset <select id="preset"></select></label>
+      <label>Teams <input type="number" id="teams" min="4" max="20"></label>
+      <label>My pick <input type="number" id="myPick" min="1" max="20"></label>
+      <label>Rounds <input type="number" id="rounds" min="0" max="30" title="0 = roster size"></label>
+    </div>
+    <div class="grid2">
+      <div>
+        <h4 style="margin:4px 0">Roster slots</h4>
+        <div class="fields" id="rosterFields"></div>
+      </div>
+      <div>
+        <h4 style="margin:4px 0">Scoring</h4>
+        <div class="fields" id="scoringFields"></div>
+      </div>
+    </div>
+    <details>
+      <summary>Paste your Yahoo League Settings page (auto-fills teams, roster, scoring)</summary>
+      <p class="muted" style="margin:6px 0">In Yahoo: League &rarr; Settings (or Commissioner &rarr; League Settings), select all (Ctrl+A), copy, paste here, then click Parse.</p>
+      <textarea id="settingsPaste" placeholder="Roster Positions: QB, WR, WR, WR, RB, RB, TE, W/R/T, K, DEF, BN, BN, BN, BN, BN, BN&#10;Passing Yards 25 yards per point&#10;Passing Touchdowns 4 ..."></textarea>
+      <div class="row"><button id="btnParseSettings">Parse pasted settings</button><span id="parseResult" class="muted"></span></div>
+    </details>
+    <details>
+      <summary>Team names (one per line, in draft order)</summary>
+      <textarea id="teamNames" placeholder="Team 1&#10;Team 2&#10;..."></textarea>
+    </details>
+    <div class="row" style="justify-content:flex-end">
+      <button class="danger" id="btnResetDraft">Reset draft (clear all picks)</button>
+      <span style="flex:1"></span>
+      <button id="btnSettingsCancel">Cancel</button>
+      <button class="primary" id="btnSettingsSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sync modal -->
+<div class="modal-bg" id="syncModal">
+  <div class="modal">
+    <h3>Sync picks from Yahoo</h3>
+    <div class="grid2">
+      <div>
+        <h4 style="margin:4px 0">A. Paste draft results</h4>
+        <p class="muted" style="margin:4px 0">In the Yahoo draft room open the <b>Draft Results</b> (or Picks) tab, select all the text, copy, and paste here. Every player name found is marked drafted in pick order. Safe to repeat: already-drafted players are skipped.</p>
+        <textarea id="pastePicks" placeholder="1.01 Team A  Jahmyr Gibbs (Det - RB)&#10;1.02 Team B  Bijan Robinson (Atl - RB) ..."></textarea>
+        <div class="row"><button class="primary" id="btnParsePicks">Apply pasted picks</button><span id="pasteResult" class="muted"></span></div>
+      </div>
+      <div>
+        <h4 style="margin:4px 0">B. Live auto-sync (local server + userscript)</h4>
+        <p class="muted" style="margin:4px 0">Run <span class="kbd">node server.js</span> from the repo, open <span class="kbd">http://localhost:3000</span>, and install <span class="kbd">yahoo-draft-sync.user.js</span> in Tampermonkey. The userscript watches the Yahoo draft room and pushes picks here.</p>
+        <div class="row"><label>Server URL <input type="text" id="syncUrl" placeholder="http://localhost:3000" style="width:220px"></label><button id="btnConnect">Connect</button></div>
+        <div id="syncStatus" class="muted"><span class="dot"></span>not connected</div>
+        <h4 style="margin:12px 0 4px">C. Replace projections (CSV)</h4>
+        <p class="muted" style="margin:4px 0">Optional: paste a CSV with columns Player, Team, Pos, ADP, Tier, Bye and stat columns (pass_yds, pass_td, pass_int, rush_yds, rush_td, rec, rec_yds, rec_td, fumbles) or FPTS. Replaces the built-in pool.</p>
+        <textarea id="csvPaste" style="min-height:80px" placeholder="Player,Team,Pos,ADP,pass_yds,..."></textarea>
+        <div class="row"><button id="btnImportCsv">Import CSV</button><button id="btnRestoreBuiltin">Restore built-in data</button><span id="csvResult" class="muted"></span></div>
+      </div>
+    </div>
+    <div class="row" style="justify-content:space-between">
+      <div class="row"><button id="btnExport">Export draft JSON</button><button id="btnImport">Import draft JSON</button><input type="file" id="importFile" hidden accept="application/json"></div>
+      <button id="btnSyncClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Help modal -->
+<div class="modal-bg" id="helpModal">
+  <div class="modal">
+    <h3>How to use during the draft</h3>
+    <ol style="margin:0;padding-left:18px;line-height:1.6">
+      <li>Set <b>Teams</b>, <b>My pick</b>, roster and scoring in Settings (or paste your Yahoo League Settings page).</li>
+      <li>Every time someone drafts, type the name in the search box and press <span class="kbd">Enter</span>. The pick goes to the team on the clock and the board advances. Use <b>Assign pick to</b> only if Yahoo's order differs (keepers).</li>
+      <li>When it is your turn the top bar pulses. The <b>Advice</b> panel shows the best picks with reasons; the table's <b>Score</b> column ranks everyone.</li>
+      <li><span class="kbd">Ctrl+Z</span> undoes the last pick. Click any board cell to remove that pick.</li>
+      <li>Fell behind? Sync &rarr; paste the Yahoo Draft Results text and every missing pick is applied at once.</li>
+    </ol>
+    <h4 style="margin:6px 0 0">How the numbers work</h4>
+    <ul style="margin:0;padding-left:18px;line-height:1.5;font-size:12px">
+      <li><b>Proj</b>: 2026 season projection scored with your league's settings.</li>
+      <li><b>VORP</b>: points over the replacement-level player at that position (starters + flex share + a little bench), recomputed from who is left on the board.</li>
+      <li><b>VONA</b>: points over the best player at that position you can <i>expect</i> to still be available at your next pick (ADP-based probabilities).</li>
+      <li><b>Avail</b>: chance the player is still on the board at your next pick.</li>
+      <li><b>Score</b> = need &times; (0.55 VORP + 0.45 VONA). Need drops for positions you have already filled, and kickers/defenses are held back until the last rounds.</li>
+    </ul>
+    <div class="row" style="justify-content:flex-end"><button id="btnHelpClose">Close</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="players.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
