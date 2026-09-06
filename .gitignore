@@ -1,3 +1,8 @@
 node_modules/
 draft-log.json
 dist/screenshot.png
+
+# Local secrets — never commit
+.env
+.env.*
+!.env.example
